@@ -17,9 +17,11 @@ import vizlib as viz
 viz.bar(sales, x="region", y="revenue", sort="desc")
 ```
 
-> ⚠️ **Status: design / MVP stage.** The API below is the target design captured in
-> [`mvp.md`](./mvp.md). The implementation is in progress — treat this README as the
-> spec for what `vizlib` will do, not a description of shipped code.
+> ⚠️ **Status: early / MVP in progress.** Milestone **M1 is implemented** — the
+> theming engine (`set_theme`, `theme`, `Theme`, light & dark) and **`viz.bar`**
+> (single / grouped / stacked / horizontal, sorting, emphasis, selective labels).
+> `viz.line`, `viz.scatter`, and `viz.hist` are next (M2). See
+> [`mvp.md`](./mvp.md) for the full plan.
 
 ---
 
@@ -42,13 +44,16 @@ viz.bar(sales, x="region", y="revenue", sort="desc")
 
 ## Installation
 
-> Not yet published to PyPI. Once released:
+Not yet published to PyPI. Install from source:
 
 ```bash
-pip install vizlib
+git clone https://github.com/HershR/viz-lib.git
+cd viz-lib
+pip install -e .
 ```
 
-Requires Python 3.10+, matplotlib, and pandas.
+Requires Python 3.10+, matplotlib, and pandas. The package uses a `src/` layout
+(`src/vizlib/`).
 
 ---
 
@@ -135,4 +140,4 @@ recolor-on-filter, no a-number-on-every-point. See
 
 ## License
 
-TBD.
+[MIT](./LICENSE).
