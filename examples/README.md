@@ -1,8 +1,9 @@
 # vizlib examples
 
-Runnable scripts that demonstrate the features implemented so far (M1: the theming
-engine and `viz.bar`). Each script builds a chart from a small pandas DataFrame and
-saves a PNG into [`images/`](./images).
+Runnable scripts that demonstrate the features implemented so far — the theming
+engine and the Core-4 charts (`viz.bar`, `viz.line`, `viz.scatter`, `viz.hist`).
+Each script builds a chart from a small pandas DataFrame and saves a PNG into
+[`images/`](./images).
 
 ## Setup
 
@@ -24,6 +25,9 @@ python examples/basic_bar.py
 python examples/grouped_and_stacked.py
 python examples/emphasis.py
 python examples/horizontal_and_counts.py
+python examples/line_trends.py
+python examples/scatter_relationships.py
+python examples/distributions.py
 python examples/theming.py
 ```
 
@@ -39,13 +43,16 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 
 ## What each script shows
 
-| Script | Feature |
-|---|---|
-| [`basic_bar.py`](./basic_bar.py) | A single series, sorted, with the top bar auto-labeled |
-| [`grouped_and_stacked.py`](./grouped_and_stacked.py) | Multi-series bars via `by=` — grouped and stacked |
-| [`emphasis.py`](./emphasis.py) | `highlight=` — accent the one bar that matters, gray the rest |
-| [`horizontal_and_counts.py`](./horizontal_and_counts.py) | `horizontal=True`, and row counts when `y` is omitted |
-| [`theming.py`](./theming.py) | The dark theme, the `theme()` context manager, and a custom `Theme` |
+| Script | Chart | Feature |
+|---|---|---|
+| [`basic_bar.py`](./basic_bar.py) | bar | A single series, sorted, with the top bar auto-labeled |
+| [`grouped_and_stacked.py`](./grouped_and_stacked.py) | bar | Multi-series bars via `by=` — grouped and stacked |
+| [`emphasis.py`](./emphasis.py) | bar | `highlight=` — accent the one bar that matters, gray the rest |
+| [`horizontal_and_counts.py`](./horizontal_and_counts.py) | bar | `horizontal=True`, and row counts when `y` is omitted |
+| [`line_trends.py`](./line_trends.py) | line | Multi-series trend and the emphasis form with an endpoint label |
+| [`scatter_relationships.py`](./scatter_relationships.py) | scatter | Color by group via `by=`, and a third dimension via `size=` |
+| [`distributions.py`](./distributions.py) | hist | A single distribution and overlaid groups on shared bins |
+| [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
 
 ## Gallery
 
@@ -75,6 +82,28 @@ omitting `y` so rows are counted per category (right).
 
 ![horizontal bar](./images/horizontal_bar.png)
 ![counts](./images/counts.png)
+
+### `line_trends.py`
+Two series in fixed hues with a frameless legend (left); the emphasis form (right)
+accents `Pro`, grays the rest, drops the legend, and labels just that line's
+endpoint.
+
+![line multi](./images/line_multi.png)
+![line emphasis](./images/line_emphasis.png)
+
+### `scatter_relationships.py`
+Points colored by category with a 2px surface ring (left), and `size=` mapping a
+numeric column to marker area (right).
+
+![scatter groups](./images/scatter_groups.png)
+![scatter sized](./images/scatter_sized.png)
+
+### `distributions.py`
+A single distribution in one hue (left), and two groups overlaid translucently on a
+shared set of bins (right).
+
+![hist single](./images/hist_single.png)
+![hist overlaid](./images/hist_overlaid.png)
 
 ### `theming.py`
 The built-in dark theme (its own validated steps, not an inversion) and a custom
