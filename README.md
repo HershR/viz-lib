@@ -113,6 +113,18 @@ Two themes ship in v1 (**light** and **dark**), each with a validated categorica
 sequential, and diverging palette plus recessive chrome tokens. See
 [`mvp.md`](./mvp.md#5-theming-system) for the palette values.
 
+A custom **`lime`** / **`lime-dark`** theme ("Lime Green", ported from a shadcn
+theme) is also built in — a lime primary/accent over light and dark surfaces:
+
+```python
+viz.bar(sales, x="region", y="revenue", theme="lime")        # by name
+with viz.theme("lime-dark"):
+    viz.line(usage, x="month", y="users", by="plan")
+```
+
+Build your own by constructing a `Theme` (see `viz.LIME`) or passing `palette=` to
+any chart.
+
 ---
 
 ## Roadmap
