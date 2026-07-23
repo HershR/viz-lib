@@ -7,87 +7,19 @@ multi-series (via ``by=``), horizontal orientation, sorting, emphasis
 
 from __future__ import annotations
 
-import warnings
-
 import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
 
 from .. import core
 from ..themes import resolve_theme
-
-# Series past this count are folded into "Other" rather than generating new hues.
-_MAX_SERIES = 8
-
-
-def _as_set(value) -> set:
-    if value is None:
-        return set()
-    if isinstance(value, (list, tuple, set)):
-        return set(value)
-    return {value}
-
-
-def _aggregate(df: pd.DataFrame, x: str, y: str | None, by: str | None) -> pd.DataFrame:
-    """Reduce ``df`` to a (categories x series) matrix of values.
-
-    Single series -> one column named after ``y`` (or "count"). With ``by`` set ->
-    one column per ``by`` value. ``y=None`` counts rows.
-    """
-    if by is None:
-        if y is None:
-            series = df.groupby(x, sort=False).size()
-            series.name = "count"
-        else:
-            series = df.groupby(x, sort=False)[y].sum()
-        return series.to_frame()
-
-    if y is None:
-        grouped = df.groupby([x, by], sort=False).size()
-    else:
-        grouped = df.groupby([x, by], sort=False)[y].sum()
-    # Rows = x categories (in first-seen order), columns = by values (first-seen).
-    matrix = grouped.unstack(by)
-    col_order = list(dict.fromkeys(df[by]))
-    row_order = list(dict.fromkeys(df[x]))
-    matrix = matrix.reindex(index=row_order, columns=col_order)
-    return matrix.fillna(0)
-
-
-def _fold_series(matrix: pd.DataFrame) -> pd.DataFrame:
-    """Keep the top 7 series by total, fold the rest into a single "Other" column."""
-    if matrix.shape[1] <= _MAX_SERIES:
-        return matrix
-    totals = matrix.sum(axis=0).sort_values(ascending=False)
-    keep = set(totals.index[: _MAX_SERIES - 1])
-    kept_cols = [c for c in matrix.columns if c in keep]  # preserve original order
-    other_cols = [c for c in matrix.columns if c not in keep]
-    warnings.warn(
-        f"{matrix.shape[1]} series exceeds the {_MAX_SERIES}-hue limit; "
-        f"folded {len(other_cols)} into 'Other'.",
-        stacklevel=3,
-    )
-    folded = matrix[kept_cols].copy()
-    folded["Other"] = matrix[other_cols].sum(axis=1)
-    return folded
-
-
-def _resolve_colors(columns, theme, highlight_set) -> tuple[list[str], bool]:
-    """Map each series column to a color. Returns (colors, emphasis_mode)."""
-    if highlight_set:
-        emphasis_mode = True
-        colors = [
-            theme.emphasis if col in highlight_set else theme.deemphasis
-            for col in columns
-        ]
-        return colors, emphasis_mode
-    colors = []
-    for i, col in enumerate(columns):
-        if col == "Other":
-            colors.append(theme.muted)
-        else:
-            colors.append(theme.categorical[i % len(theme.categorical)])
-    return colors, False
+from ._common import (
+    aggregate_matrix,
+    as_set,
+    fold_matrix,
+    resolve_colors,
+    with_palette,
+)
 
 
 def bar(
@@ -156,13 +88,11 @@ def bar(
         raise ValueError(f"sort must be None, 'asc', or 'desc'; got {sort!r}")
 
     # 2. Resolve theme (+ optional palette override).
-    th = resolve_theme(theme)
-    if palette is not None:
-        th = th.__class__(**{**th.__dict__, "categorical": tuple(palette)})
+    th = with_palette(resolve_theme(theme), palette)
 
     # 3. Shape the data.
-    matrix = _aggregate(df, x, y, by)
-    matrix = _fold_series(matrix)
+    matrix = aggregate_matrix(df, x, y, by, agg="sum")
+    matrix = fold_matrix(matrix)
 
     if sort is not None:
         totals = matrix.sum(axis=1)
@@ -173,7 +103,7 @@ def bar(
     multi = by is not None and len(columns) > 1
 
     # Highlight matches series (when by is set) or x categories otherwise.
-    highlight_set = _as_set(highlight)
+    highlight_set = as_set(highlight)
     if highlight_set and by is None:
         colors = [
             th.emphasis if cat in {str(h) for h in highlight_set} else th.deemphasis
@@ -182,7 +112,7 @@ def bar(
         emphasis_mode = True
         series_colors = None
     else:
-        series_colors, emphasis_mode = _resolve_colors(columns, th, highlight_set)
+        series_colors, emphasis_mode = resolve_colors(columns, th, highlight_set)
         colors = None
 
     ax = core.new_axes(th, ax)
@@ -197,8 +127,9 @@ def bar(
         # Single series.
         values = matrix.iloc[:, 0].to_numpy(dtype=float)
         bar_colors = colors if colors is not None else series_colors[0]
-        container = plot(positions, values, **{span_kw: 0.8}, color=bar_colors,
-                         **kwargs)
+        container = plot(
+            positions, values, **{span_kw: 0.8}, color=bar_colors, **kwargs
+        )
         drawn.append((container, values))
     elif stacked:
         offset = np.zeros(n)
@@ -206,9 +137,14 @@ def bar(
         for j, col in enumerate(columns):
             values = matrix[col].to_numpy(dtype=float)
             container = plot(
-                positions, values, **{span_kw: 0.8, base_kw: offset},
-                color=series_colors[j], label=str(col),
-                edgecolor=th.surface, linewidth=1.5, **kwargs,
+                positions,
+                values,
+                **{span_kw: 0.8, base_kw: offset},
+                color=series_colors[j],
+                label=str(col),
+                edgecolor=th.surface,
+                linewidth=1.5,
+                **kwargs,
             )
             drawn.append((container, values))
             offset = offset + values
@@ -220,8 +156,12 @@ def bar(
             values = matrix[col].to_numpy(dtype=float)
             shift = (j - (len(columns) - 1) / 2) * bar_span
             container = plot(
-                positions + shift, values, **{span_kw: bar_span},
-                color=series_colors[j], label=str(col), **kwargs,
+                positions + shift,
+                values,
+                **{span_kw: bar_span},
+                color=series_colors[j],
+                label=str(col),
+                **kwargs,
             )
             drawn.append((container, values))
 
@@ -234,15 +174,25 @@ def bar(
     else:
         ax.set_xticks(positions, categories)
 
-    _apply_labels(ax, th, drawn, label, horizontal, emphasis_mode,
-                  colors, highlight_set, matrix, by)
+    _apply_labels(
+        ax,
+        th,
+        drawn,
+        label,
+        horizontal,
+        emphasis_mode,
+        colors,
+        highlight_set,
+        matrix,
+        by,
+    )
 
     # Legend only for genuine multi-color multi-series (not the emphasis form).
     if multi and not emphasis_mode:
         core.add_legend(ax, th)
 
     default_cat_label = x
-    default_val_label = (y if y is not None else "count")
+    default_val_label = y if y is not None else "count"
     if horizontal:
         xlabel = xlabel if xlabel is not None else default_val_label
         ylabel = ylabel if ylabel is not None else default_cat_label
@@ -254,8 +204,18 @@ def bar(
     return ax
 
 
-def _apply_labels(ax, theme, drawn, label, horizontal, emphasis_mode,
-                  category_colors, highlight_set, matrix, by):
+def _apply_labels(
+    ax,
+    theme,
+    drawn,
+    label,
+    horizontal,
+    emphasis_mode,
+    category_colors,
+    highlight_set,
+    matrix,
+    by,
+):
     """Place direct value labels according to the ``label`` setting."""
     if label is False:
         return
@@ -273,9 +233,14 @@ def _apply_labels(ax, theme, drawn, label, horizontal, emphasis_mode,
                 xy = (rect.get_x() + rect.get_width() / 2, rect.get_height())
                 xytext, ha, va = (0, 4), "center", "bottom"
             ax.annotate(
-                core.format_value(value), xy=xy, xytext=xytext,
-                textcoords="offset points", ha=ha, va=va,
-                color=theme.secondary_ink, fontsize=9,
+                core.format_value(value),
+                xy=xy,
+                xytext=xytext,
+                textcoords="offset points",
+                ha=ha,
+                va=va,
+                color=theme.secondary_ink,
+                fontsize=9,
             )
 
     if label is True:

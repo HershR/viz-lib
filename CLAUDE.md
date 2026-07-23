@@ -1,0 +1,96 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+`vizlib` is an **opinionated wrapper around matplotlib** that renders **pandas
+DataFrames**. It draws nothing from scratch — every chart is produced by a
+matplotlib call; the library's value is the *good defaults* it applies on top.
+Read `mvp.md` for the full design spec and roadmap; `README.md` for the user-facing
+pitch and current status.
+
+## Commands
+
+The package uses a `src/` layout, so install it editable before running anything:
+
+```bash
+pip install -e .                 # runtime deps: matplotlib, pandas
+pip install -e ".[dev]"          # + pytest, pytest-mpl, ruff, black
+```
+
+```bash
+pytest                           # full suite (config in pyproject.toml -> tests/)
+pytest tests/test_bar.py         # one file
+pytest tests/test_bar.py::test_highlight_emphasis_colors   # one test
+pytest -k emphasis               # by keyword
+
+ruff check src tests             # lint
+black src tests                  # format
+```
+
+Tests force the headless `Agg` backend via `tests/conftest.py` (imported before
+pyplot). Any script or test that renders must not require a display; save with
+`savefig` rather than `show`.
+
+## Architecture
+
+### The chart contract
+
+Every chart function (`charts/bar.py`, `line.py`, `scatter.py`, `hist.py`) follows
+the same five-step pipeline, and new chart types must too:
+
+1. **Validate** input — df is a DataFrame, columns exist, args in range.
+2. **Resolve theme** — `themes.resolve_theme(theme)` turns the `theme=` arg
+   (`None` → active global, name → built-in, or a `Theme`) into a concrete `Theme`.
+3. **Call matplotlib** — the actual `ax.bar`/`ax.plot`/… . This is the *only*
+   drawing step. `core.new_axes(theme, ax)` returns the caller's `ax` or a fresh
+   themed one.
+4. **Post-style** via `core` helpers — `style_axes` (despine, hairline grid, muted
+   ticks), `finalize` (title/labels in ink tokens), `add_legend`, `format_value`.
+5. **Return the `Axes`.** Never return `None` — callers drop down to raw matplotlib
+   from the returned object.
+
+### Module roles
+
+- `palettes.py` — pure color data (no logic), keyed by mode `"light"`/`"dark"`:
+  the 8-hue categorical order, sequential/diverging ramps, and chrome/ink tokens.
+- `themes.py` — the immutable `Theme` dataclass assembled from `palettes`, the
+  built-in `LIGHT`/`DARK`, global theme state (`set_theme`/`get_theme`/`theme`
+  context manager), and `apply_theme` which writes matplotlib `rcParams`.
+- `core.py` — theme-agnostic post-styling helpers shared by all charts.
+- `charts/_common.py` — data-shaping and color logic shared across charts:
+  `aggregate_matrix`/`fold_matrix` (bar, line), `split_groups`/`fold_groups`
+  (scatter, hist), `resolve_colors`, `with_palette`, `as_set`. New charts reuse
+  these rather than reimplementing the fixed-palette/fold-past-8 rules.
+- `charts/` — one module per chart type, re-exported from `charts/__init__.py`,
+  then from the top-level `__init__.py`.
+
+Theming is applied **twice on purpose**: `apply_theme` sets global `rcParams` (what
+new figures inherit), and `core.style_axes` restyles the specific `Axes` so a
+caller-supplied `ax=` is themed regardless of global state.
+
+### Design non-negotiables (these are the product — do not "simplify" them away)
+
+These come from `mvp.md` §2/§10 and are encoded as defaults:
+
+- **Categorical palette is a fixed 8-hue order, never cycled.** The order *is* the
+  colorblind-safety mechanism. A 9th series must fold into "Other" (see
+  `_fold_series` in `bar.py`) — never generate or cycle a new hue.
+- **Emphasis over rainbow.** `highlight=` colors the selected mark(s) in the accent
+  hue and grays the rest (and suppresses the legend); this is the intended answer to
+  "make it clearer," not more colors.
+- **Recessive chrome:** no top/right spines, solid hairline gridlines, muted ticks.
+- **Selective labels:** `label="auto"` labels only the extreme/highlighted mark —
+  never a value on every mark.
+- **One axis.** Do not add a dual-axis / secondary-y API.
+- **Dark mode is a distinct validated theme**, not an auto-inversion of the light one.
+
+## Branches & roadmap
+
+Milestones are defined in `mvp.md` §8. `implement-core-charts` holds M1 (theming +
+`viz.bar`) and M2 (`line`/`scatter`/`hist` on the same contract). M3 adds shared
+emphasis/labeling across all chart types (today `bar` and `line` carry
+`highlight=`/`label=`; `scatter` and `hist` do not yet). An `examples/` showcase
+(scripts + rendered gallery) lives on the separate `examples` branch, based on
+`implement-core-charts`.

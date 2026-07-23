@@ -17,11 +17,10 @@ import vizlib as viz
 viz.bar(sales, x="region", y="revenue", sort="desc")
 ```
 
-> ⚠️ **Status: early / MVP in progress.** Milestone **M1 is implemented** — the
-> theming engine (`set_theme`, `theme`, `Theme`, light & dark) and **`viz.bar`**
-> (single / grouped / stacked / horizontal, sorting, emphasis, selective labels).
-> `viz.line`, `viz.scatter`, and `viz.hist` are next (M2). See
-> [`mvp.md`](./mvp.md) for the full plan.
+> ⚠️ **Status: early / MVP in progress.** The theming engine (`set_theme`, `theme`,
+> `Theme`, light & dark) and the **Core-4 charts** — `bar`, `line`, `scatter`,
+> `hist` (M1 + M2) — are implemented. Next up (M3) is shared emphasis/labeling
+> across all chart types. See [`mvp.md`](./mvp.md) for the full plan.
 
 ---
 

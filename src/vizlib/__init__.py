@@ -10,13 +10,16 @@ underlying matplotlib ``Axes`` so you can always drop down to raw matplotlib.
 
 from __future__ import annotations
 
-from .charts import bar
+from .charts import bar, hist, line, scatter
 from .themes import DARK, LIGHT, Theme, get_theme, set_theme, theme
 
 __version__ = "0.1.0"
 
 __all__ = [
     "bar",
+    "line",
+    "scatter",
+    "hist",
     "Theme",
     "LIGHT",
     "DARK",
