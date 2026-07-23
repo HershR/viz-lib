@@ -1,9 +1,10 @@
 """Themes: a small bundle of palettes + chrome + typography, plus the global
 theme state and the matplotlib ``rcParams`` application.
 
-Two themes ship in v1: :data:`LIGHT` and :data:`DARK`. A theme is applied globally
-with :func:`set_theme` or scoped with the :func:`theme` context manager; individual
-chart calls can also override per-call via their ``theme=`` argument.
+Built-in themes: :data:`LIGHT`, :data:`DARK`, and the custom :data:`LIME` /
+:data:`LIME_DARK` ("Lime Green", ported from a shadcn theme). A theme is applied
+globally with :func:`set_theme` or scoped with the :func:`theme` context manager;
+individual chart calls can also override per-call via their ``theme=`` argument.
 """
 
 from __future__ import annotations
@@ -56,13 +57,22 @@ class Theme:
             diverging=palettes.DIVERGING[mode],
             emphasis=palettes.EMPHASIS[mode],
             deemphasis=palettes.DEEMPHASIS[mode],
+            font_family=palettes.FONT_FAMILY.get(mode, ("sans-serif",)),
         )
 
 
 LIGHT = Theme.from_mode("light")
 DARK = Theme.from_mode("dark")
+# "Lime Green" — a custom theme ported from a shadcn theme (lime primary).
+LIME = Theme.from_mode("lime")
+LIME_DARK = Theme.from_mode("lime-dark")
 
-_BUILTIN: dict[str, Theme] = {"light": LIGHT, "dark": DARK}
+_BUILTIN: dict[str, Theme] = {
+    "light": LIGHT,
+    "dark": DARK,
+    "lime": LIME,
+    "lime-dark": LIME_DARK,
+}
 _active: Theme = LIGHT
 
 
