@@ -29,6 +29,7 @@ python examples/line_trends.py
 python examples/scatter_relationships.py
 python examples/distributions.py
 python examples/theming.py
+python examples/theme_lime.py
 ```
 
 Or run them all at once:
@@ -53,6 +54,7 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 | [`scatter_relationships.py`](./scatter_relationships.py) | scatter | Color by group via `by=`, and a third dimension via `size=` |
 | [`distributions.py`](./distributions.py) | hist | A single distribution and overlaid groups on shared bins |
 | [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
+| [`theme_lime.py`](./theme_lime.py) | any | The built-in "Lime Green" theme (`lime` / `lime-dark`) |
 
 ## Gallery
 
@@ -111,3 +113,13 @@ The built-in dark theme (its own validated steps, not an inversion) and a custom
 
 ![dark theme](./images/theme_dark.png)
 ![custom theme](./images/theme_custom.png)
+
+### `theme_lime.py`
+The built-in **Lime Green** theme (ported from a shadcn theme). The lime primary
+leads single-series and first-series charts; the rest of the palette is a curated,
+distinct set. Light (`lime`) and dark (`lime-dark`) variants.
+
+![lime bar](./images/lime_bar.png)
+![lime grouped](./images/lime_grouped.png)
+![lime dark line](./images/lime_dark_line.png)
+![lime dark scatter](./images/lime_dark_scatter.png)
