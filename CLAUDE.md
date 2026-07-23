@@ -37,8 +37,8 @@ pyplot). Any script or test that renders must not require a display; save with
 
 ### The chart contract
 
-Every chart function (currently only `charts/bar.py`) follows the same five-step
-pipeline, and new chart types must too:
+Every chart function (`charts/bar.py`, `line.py`, `scatter.py`, `hist.py`) follows
+the same five-step pipeline, and new chart types must too:
 
 1. **Validate** input — df is a DataFrame, columns exist, args in range.
 2. **Resolve theme** — `themes.resolve_theme(theme)` turns the `theme=` arg
@@ -59,6 +59,10 @@ pipeline, and new chart types must too:
   built-in `LIGHT`/`DARK`, global theme state (`set_theme`/`get_theme`/`theme`
   context manager), and `apply_theme` which writes matplotlib `rcParams`.
 - `core.py` — theme-agnostic post-styling helpers shared by all charts.
+- `charts/_common.py` — data-shaping and color logic shared across charts:
+  `aggregate_matrix`/`fold_matrix` (bar, line), `split_groups`/`fold_groups`
+  (scatter, hist), `resolve_colors`, `with_palette`, `as_set`. New charts reuse
+  these rather than reimplementing the fixed-palette/fold-past-8 rules.
 - `charts/` — one module per chart type, re-exported from `charts/__init__.py`,
   then from the top-level `__init__.py`.
 
@@ -85,6 +89,8 @@ These come from `mvp.md` §2/§10 and are encoded as defaults:
 ## Branches & roadmap
 
 Milestones are defined in `mvp.md` §8. `implement-core-charts` holds M1 (theming +
-`viz.bar`). M2 adds `line`/`scatter`/`hist` on the same contract; M3 adds shared
-emphasis/labeling. An `examples/` showcase (scripts + rendered gallery) lives on the
-separate `examples` branch, based on `implement-core-charts`.
+`viz.bar`) and M2 (`line`/`scatter`/`hist` on the same contract). M3 adds shared
+emphasis/labeling across all chart types (today `bar` and `line` carry
+`highlight=`/`label=`; `scatter` and `hist` do not yet). An `examples/` showcase
+(scripts + rendered gallery) lives on the separate `examples` branch, based on
+`implement-core-charts`.

@@ -61,8 +61,14 @@ def finalize(
 ) -> None:
     """Apply title and axis labels with the theme's ink colors."""
     if title:
-        ax.set_title(title, color=theme.primary_ink, fontsize=13, fontweight="bold",
-                     loc="left", pad=12)
+        ax.set_title(
+            title,
+            color=theme.primary_ink,
+            fontsize=13,
+            fontweight="bold",
+            loc="left",
+            pad=12,
+        )
     if xlabel is not None:
         ax.set_xlabel(xlabel, color=theme.secondary_ink)
     if ylabel is not None:
