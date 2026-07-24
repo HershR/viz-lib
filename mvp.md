@@ -108,7 +108,8 @@ Every chart function speaks the same keywords, so learning one teaches the rest.
 | `highlight` | value(s) of `by` to emphasize; everything else is grayed |
 | `sort` | `None` / `"asc"` / `"desc"` — order categories by value (bar) |
 | `label` | `"auto"` (default, selective) / `True` / `False` — direct value labels |
-| `title`, `xlabel`, `ylabel` | text overrides (sensible defaults from column names) |
+| `title`, `subtitle`, `caption` | upper-left title, secondary subtitle beneath it, muted source caption at the bottom |
+| `xlabel`, `ylabel` | axis label overrides (sensible defaults from column names) |
 | `theme` | theme name or `Theme` object; falls back to the global theme |
 | `palette` | override the categorical/sequential palette for this chart |
 | `ax` | draw into an existing `Axes` (compose into a figure you control) |

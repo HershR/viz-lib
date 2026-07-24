@@ -36,6 +36,8 @@ def bar(
     theme=None,
     palette=None,
     title: str | None = None,
+    subtitle: str | None = None,
+    caption: str | None = None,
     xlabel: str | None = None,
     ylabel: str | None = None,
     ax: Axes | None = None,
@@ -199,7 +201,15 @@ def bar(
     else:
         xlabel = xlabel if xlabel is not None else default_cat_label
         ylabel = ylabel if ylabel is not None else default_val_label
-    core.finalize(ax, th, title=title, xlabel=xlabel, ylabel=ylabel)
+    core.finalize(
+        ax,
+        th,
+        title=title,
+        subtitle=subtitle,
+        caption=caption,
+        xlabel=xlabel,
+        ylabel=ylabel,
+    )
 
     return ax
 
@@ -240,7 +250,7 @@ def _apply_labels(
                 ha=ha,
                 va=va,
                 color=theme.secondary_ink,
-                fontsize=9,
+                fontsize=theme.type_scale["annotation"],
             )
 
     if label is True:

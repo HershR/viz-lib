@@ -10,12 +10,29 @@ individual chart calls can also override per-call via their ``theme=`` argument.
 from __future__ import annotations
 
 import contextlib
+from collections.abc import Mapping
 from dataclasses import dataclass, field
+from types import MappingProxyType
 
 import matplotlib as mpl
 from cycler import cycler
 
 from . import palettes
+
+# Deliberate type scale (points). Title is largest, then subtitle, axis labels,
+# ticks, data-label annotations, and source captions — a readable hierarchy the
+# charts pull from rather than sprinkling ad-hoc sizes.
+_TYPE_SCALE: Mapping[str, int] = MappingProxyType(
+    {
+        "title": 15,
+        "subtitle": 12,
+        "label": 11,
+        "legend": 10,
+        "tick": 10,
+        "annotation": 9,
+        "caption": 8,
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -40,6 +57,7 @@ class Theme:
     emphasis: str
     deemphasis: str
     font_family: tuple[str, ...] = field(default=("sans-serif",))
+    type_scale: Mapping[str, int] = field(default_factory=lambda: _TYPE_SCALE)
 
     @classmethod
     def from_mode(cls, mode: str) -> "Theme":
@@ -123,6 +141,11 @@ def apply_theme(theme: Theme) -> None:
             "axes.spines.right": False,
             "font.family": list(theme.font_family),
             "axes.prop_cycle": cycler(color=list(theme.categorical)),
+            "axes.titlesize": theme.type_scale["title"],
+            "axes.labelsize": theme.type_scale["label"],
+            "xtick.labelsize": theme.type_scale["tick"],
+            "ytick.labelsize": theme.type_scale["tick"],
+            "legend.fontsize": theme.type_scale["legend"],
         }
     )
 
