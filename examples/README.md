@@ -5,6 +5,13 @@ engine and the Core-4 charts (`viz.bar`, `viz.line`, `viz.scatter`, `viz.hist`).
 Each script builds a chart from a small pandas DataFrame and saves a PNG into
 [`images/`](./images).
 
+## The pitch: matplotlib default vs vizlib
+
+Same data, the same one call — vizlib draws nothing matplotlib can't, it just picks
+good defaults ([`before_after.py`](./before_after.py)):
+
+![matplotlib default vs vizlib](./images/before_after.png)
+
 ## Setup
 
 From the repository root, install the library (editable) into your environment:
@@ -21,6 +28,7 @@ your import path.
 Run any script from the **repository root**:
 
 ```bash
+python examples/before_after.py
 python examples/basic_bar.py
 python examples/grouped_and_stacked.py
 python examples/emphasis.py
@@ -46,6 +54,7 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 
 | Script | Chart | Feature |
 |---|---|---|
+| [`before_after.py`](./before_after.py) | bar, line | Side-by-side: matplotlib defaults vs vizlib on the same data |
 | [`basic_bar.py`](./basic_bar.py) | bar | A single series, sorted, with the top bar auto-labeled |
 | [`grouped_and_stacked.py`](./grouped_and_stacked.py) | bar | Multi-series bars via `by=` — grouped and stacked |
 | [`emphasis.py`](./emphasis.py) | bar | `highlight=` — accent the one bar that matters, gray the rest |
