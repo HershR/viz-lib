@@ -58,6 +58,15 @@ def test_no_size_constant_area(points):
     assert len(set(np.round(sizes, 3))) == 1
 
 
+def test_highlight_emphasis(points):
+    # group order is first-seen: A then B
+    ax = viz.scatter(points, x="height", y="weight", by="group", highlight="A")
+    faces = [to_hex(c.get_facecolor()[0]) for c in ax.collections]
+    assert faces[0] == viz.LIGHT.emphasis  # A highlighted
+    assert faces[1] == viz.LIGHT.deemphasis  # B grayed
+    assert ax.get_legend() is None  # legend dropped in emphasis mode
+
+
 def test_y_is_required(points):
     with pytest.raises(TypeError):
         viz.scatter(points, x="height")  # missing y
