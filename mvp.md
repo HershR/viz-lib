@@ -125,11 +125,13 @@ viz.line(df, x, y=None, by=None, *, highlight=None, label="auto",
          theme=None, palette=None, title=None, xlabel=None, ylabel=None,
          ax=None, **kwargs) -> Axes
 
-viz.scatter(df, x, y, by=None, *, size=None, theme=None, palette=None,
-            title=None, xlabel=None, ylabel=None, ax=None, **kwargs) -> Axes
+viz.scatter(df, x, y, by=None, *, size=None, highlight=None, theme=None,
+            palette=None, title=None, xlabel=None, ylabel=None, ax=None,
+            **kwargs) -> Axes
 
-viz.hist(df, x, by=None, *, bins="auto", theme=None, palette=None,
-         title=None, xlabel=None, ylabel=None, ax=None, **kwargs) -> Axes
+viz.hist(df, x, by=None, *, bins="auto", highlight=None, theme=None,
+         palette=None, title=None, xlabel=None, ylabel=None, ax=None,
+         **kwargs) -> Axes
 ```
 
 Notes:
@@ -296,7 +298,7 @@ dependencies = ["matplotlib>=3.7", "pandas>=2.0"]
 |---|---|---|
 | **M1** | Theming engine + `bar` | `set_theme`, `Theme`, light/dark palettes exist; `viz.bar` draws a themed grouped/stacked/horizontal bar and returns an `Axes`. |
 | **M2** | Remaining Core 4 | `line`, `scatter`, `hist` implemented on the shared contract; all four honor the shared keyword vocabulary. |
-| **M3** | Emphasis + labeling | `highlight=` grays non-selected series on bar & line; `label="auto"` places selective direct labels; legend logic for ≥ 2 series. |
+| **M3** | Shared emphasis | `highlight=` accents the selected series/group and grays the rest (dropping the legend) on **all four** charts via a shared path; `label="auto"` selective labels on bar & line. Direct labels stay bar/line-only (a value per point/bin is the anti-pattern). |
 | **M4** | Polish, docs, gallery | README, an examples gallery (side-by-side "matplotlib default vs vizlib"), image-comparison tests, `pyproject.toml` packaged & pip-installable. |
 
 ---

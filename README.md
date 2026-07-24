@@ -17,9 +17,12 @@ import vizlib as viz
 viz.bar(sales, x="region", y="revenue", sort="desc")
 ```
 
-> ⚠️ **Status: design / MVP stage.** The API below is the target design captured in
-> [`mvp.md`](./mvp.md). The implementation is in progress — treat this README as the
-> spec for what `vizlib` will do, not a description of shipped code.
+> ✅ **Status: MVP core complete (M1–M4).** The theming engine (`set_theme`, `theme`,
+> `Theme`; light, dark, and the custom `lime` / `lime-dark`), the **Core-4 charts**
+> — `bar`, `line`, `scatter`, `hist` — shared **emphasis** (`highlight=`) across all
+> four, a portable render-matrix test suite, and a buildable/typed package. See
+> [`mvp.md`](./mvp.md) for the roadmap and what's next (the `.viz` accessor and more
+> chart types).
 
 ---
 
@@ -42,13 +45,16 @@ viz.bar(sales, x="region", y="revenue", sort="desc")
 
 ## Installation
 
-> Not yet published to PyPI. Once released:
+Not yet published to PyPI. Install from source:
 
 ```bash
-pip install vizlib
+git clone https://github.com/HershR/viz-lib.git
+cd viz-lib
+pip install -e .
 ```
 
-Requires Python 3.10+, matplotlib, and pandas.
+Requires Python 3.10+, matplotlib, and pandas. The package uses a `src/` layout
+(`src/vizlib/`).
 
 ---
 
@@ -88,8 +94,8 @@ ax.figure.savefig("q3.png", dpi=200)
 |---|---|---|
 | `viz.bar` | comparing magnitude | `by=` → grouped; `stacked=True`; `horizontal=True`; `sort=` |
 | `viz.line` | trends over time | `by=` for multiple series; `highlight=` for emphasis |
-| `viz.scatter` | relationships | `by=` for categories, `size=` for a third dimension |
-| `viz.hist` | distributions | `bins="auto"` by default |
+| `viz.scatter` | relationships | `by=` for categories, `size=` for a third dimension, `highlight=` for emphasis |
+| `viz.hist` | distributions | `bins="auto"` by default; `by=` for groups, `highlight=` for emphasis |
 
 Every function shares the same keyword vocabulary — `x`, `y`, `by`, `highlight`,
 `sort`, `label`, `title`, `theme`, `palette`, `ax` — so learning one teaches the
@@ -108,6 +114,18 @@ with viz.theme("dark"):     # scoped override
 Two themes ship in v1 (**light** and **dark**), each with a validated categorical,
 sequential, and diverging palette plus recessive chrome tokens. See
 [`mvp.md`](./mvp.md#5-theming-system) for the palette values.
+
+A custom **`lime`** / **`lime-dark`** theme ("Lime Green", ported from a shadcn
+theme) is also built in — a lime primary/accent over light and dark surfaces:
+
+```python
+viz.bar(sales, x="region", y="revenue", theme="lime")        # by name
+with viz.theme("lime-dark"):
+    viz.line(usage, x="month", y="users", by="plan")
+```
+
+Build your own by constructing a `Theme` (see `viz.LIME`) or passing `palette=` to
+any chart.
 
 ---
 
@@ -135,4 +153,4 @@ recolor-on-filter, no a-number-on-every-point. See
 
 ## License
 
-TBD.
+[MIT](./LICENSE).
