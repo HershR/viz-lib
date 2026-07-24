@@ -27,7 +27,13 @@ pytest -k emphasis               # by keyword
 
 ruff check src tests             # lint
 black src tests                  # format
+
+python -m build                  # build sdist + wheel into dist/ (ships py.typed)
 ```
+
+`tests/test_render_matrix.py` is a portable render-matrix suite (every chart ×
+option combo × theme, asserting artists render) — used instead of pixel baselines,
+which break across matplotlib/font versions.
 
 Tests force the headless `Agg` backend via `tests/conftest.py` (imported before
 pyplot). Any script or test that renders must not require a display; save with
