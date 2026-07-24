@@ -1,4 +1,4 @@
-"""Scatter plots: colored by group, and with a third dimension via `size=`.
+"""Scatter plots: colored by group, sized via `size=`, and emphasis via `highlight=`.
 
 Run:  python examples/scatter_relationships.py
 """
@@ -34,3 +34,9 @@ ax = viz.scatter(countries, x="income", y="life_expectancy", size="population",
                  title="...sized by population")
 ax.figure.savefig(IMAGES / "scatter_sized.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "scatter_sized.png")
+
+# Emphasis: highlight one group; the rest fade to gray and the legend is dropped.
+ax = viz.scatter(countries, x="income", y="life_expectancy", by="continent",
+                 highlight="Europe", title="Europe, in context")
+ax.figure.savefig(IMAGES / "scatter_emphasis.png", dpi=120, bbox_inches="tight")
+print("wrote", IMAGES / "scatter_emphasis.png")

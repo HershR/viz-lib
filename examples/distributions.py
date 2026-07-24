@@ -1,4 +1,4 @@
-"""Histograms: a single distribution, and overlaid groups via `by=`.
+"""Histograms: a single distribution, overlaid groups, and emphasis via `highlight=`.
 
 Run:  python examples/distributions.py
 """
@@ -33,3 +33,9 @@ ax = viz.hist(requests, x="latency_ms", by="region", bins=30,
               title="Latency by region", xlabel="latency (ms)")
 ax.figure.savefig(IMAGES / "hist_overlaid.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "hist_overlaid.png")
+
+# Emphasis: highlight one distribution; the rest fade back, legend dropped.
+ax = viz.hist(requests, x="latency_ms", by="region", bins=30, highlight="eu-west",
+              title="eu-west stands out", xlabel="latency (ms)")
+ax.figure.savefig(IMAGES / "hist_emphasis.png", dpi=120, bbox_inches="tight")
+print("wrote", IMAGES / "hist_emphasis.png")

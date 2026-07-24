@@ -51,8 +51,8 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 | [`emphasis.py`](./emphasis.py) | bar | `highlight=` — accent the one bar that matters, gray the rest |
 | [`horizontal_and_counts.py`](./horizontal_and_counts.py) | bar | `horizontal=True`, and row counts when `y` is omitted |
 | [`line_trends.py`](./line_trends.py) | line | Multi-series trend and the emphasis form with an endpoint label |
-| [`scatter_relationships.py`](./scatter_relationships.py) | scatter | Color by group via `by=`, and a third dimension via `size=` |
-| [`distributions.py`](./distributions.py) | hist | A single distribution and overlaid groups on shared bins |
+| [`scatter_relationships.py`](./scatter_relationships.py) | scatter | Color by group via `by=`, a third dimension via `size=`, emphasis via `highlight=` |
+| [`distributions.py`](./distributions.py) | hist | A single distribution, overlaid groups on shared bins, emphasis via `highlight=` |
 | [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
 | [`theme_lime.py`](./theme_lime.py) | any | The built-in "Lime Green" theme (`lime` / `lime-dark`) |
 
@@ -94,18 +94,22 @@ endpoint.
 ![line emphasis](./images/line_emphasis.png)
 
 ### `scatter_relationships.py`
-Points colored by category with a 2px surface ring (left), and `size=` mapping a
-numeric column to marker area (right).
+Points colored by category with a 2px surface ring, `size=` mapping a numeric column
+to marker area, and `highlight=` accenting one group while the rest fade to gray (no
+legend).
 
 ![scatter groups](./images/scatter_groups.png)
 ![scatter sized](./images/scatter_sized.png)
+![scatter emphasis](./images/scatter_emphasis.png)
 
 ### `distributions.py`
-A single distribution in one hue (left), and two groups overlaid translucently on a
-shared set of bins (right).
+A single distribution in one hue, two groups overlaid translucently on a shared set
+of bins, and `highlight=` bolding one distribution while the rest fade back (no
+legend).
 
 ![hist single](./images/hist_single.png)
 ![hist overlaid](./images/hist_overlaid.png)
+![hist emphasis](./images/hist_emphasis.png)
 
 ### `theming.py`
 The built-in dark theme (its own validated steps, not an inversion) and a custom
