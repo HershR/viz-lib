@@ -92,8 +92,8 @@ ax.figure.savefig("q3.png", dpi=200)
 |---|---|---|
 | `viz.bar` | comparing magnitude | `by=` → grouped; `stacked=True`; `horizontal=True`; `sort=` |
 | `viz.line` | trends over time | `by=` for multiple series; `highlight=` for emphasis |
-| `viz.scatter` | relationships | `by=` for categories, `size=` for a third dimension |
-| `viz.hist` | distributions | `bins="auto"` by default |
+| `viz.scatter` | relationships | `by=` for categories, `size=` for a third dimension, `highlight=` for emphasis |
+| `viz.hist` | distributions | `bins="auto"` by default; `by=` for groups, `highlight=` for emphasis |
 
 Every function shares the same keyword vocabulary — `x`, `y`, `by`, `highlight`,
 `sort`, `label`, `title`, `theme`, `palette`, `ax` — so learning one teaches the

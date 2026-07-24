@@ -59,6 +59,14 @@ def test_shared_bins_align_across_groups(dist):
     assert len(lefts) == 8
 
 
+def test_highlight_emphasis(dist):
+    ax = viz.hist(dist, x="value", by="cohort", bins=6, highlight="new")
+    colors = {to_hex(p.get_facecolor()) for p in ax.patches}
+    assert viz.LIGHT.emphasis in colors  # highlighted distribution
+    assert viz.LIGHT.deemphasis in colors  # faded context
+    assert ax.get_legend() is None  # legend dropped in emphasis mode
+
+
 def test_theme_and_palette_override(dist):
     ax = viz.hist(dist, x="value", bins=5, theme="dark")
     assert to_hex(ax.patches[0].get_facecolor()) == viz.DARK.categorical[0]

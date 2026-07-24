@@ -89,8 +89,9 @@ These come from `mvp.md` §2/§10 and are encoded as defaults:
 ## Branches & roadmap
 
 Milestones are defined in `mvp.md` §8. `implement-core-charts` holds M1 (theming +
-`viz.bar`) and M2 (`line`/`scatter`/`hist` on the same contract). M3 adds shared
-emphasis/labeling across all chart types (today `bar` and `line` carry
-`highlight=`/`label=`; `scatter` and `hist` do not yet). An `examples/` showcase
-(scripts + rendered gallery) lives on the separate `examples` branch, based on
-`implement-core-charts`.
+`viz.bar`), M2 (`line`/`scatter`/`hist` on the same contract), and M3 (shared
+emphasis): all four charts now take `highlight=` (accent the selected series/group,
+gray the rest, drop the legend) via the shared `resolve_colors` path. Direct value
+labels (`label=`) stay bar/line-only by design — a value on every point/bin is the
+anti-pattern. An `examples/` showcase (scripts + rendered gallery) lives on the
+separate `examples` branch, based on `implement-core-charts`.
