@@ -24,6 +24,8 @@ def hist(
     theme=None,
     palette=None,
     title: str | None = None,
+    subtitle: str | None = None,
+    caption: str | None = None,
     xlabel: str | None = None,
     ylabel: str | None = None,
     ax: Axes | None = None,
@@ -90,6 +92,8 @@ def hist(
         ax,
         th,
         title=title,
+        subtitle=subtitle,
+        caption=caption,
         xlabel=xlabel if xlabel is not None else x,
         ylabel=ylabel if ylabel is not None else "count",
     )

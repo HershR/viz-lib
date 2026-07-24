@@ -98,8 +98,11 @@ ax.figure.savefig("q3.png", dpi=200)
 | `viz.hist` | distributions | `bins="auto"` by default; `by=` for groups, `highlight=` for emphasis |
 
 Every function shares the same keyword vocabulary — `x`, `y`, `by`, `highlight`,
-`sort`, `label`, `title`, `theme`, `palette`, `ax` — so learning one teaches the
-rest. See [`mvp.md`](./mvp.md#4-public-api) for full signatures.
+`sort`, `label`, `title`, `subtitle`, `caption`, `theme`, `palette`, `ax` — so
+learning one teaches the rest. Titles sit upper-left with an optional `subtitle`
+beneath and a muted `caption` (source line) at the bottom, sized by a deliberate
+type scale. Small multi-series line charts are labeled directly at each line's end
+instead of via a legend. See [`mvp.md`](./mvp.md#4-public-api) for full signatures.
 
 ---
 

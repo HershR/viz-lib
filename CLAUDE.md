@@ -53,7 +53,8 @@ the same five-step pipeline, and new chart types must too:
    drawing step. `core.new_axes(theme, ax)` returns the caller's `ax` or a fresh
    themed one.
 4. **Post-style** via `core` helpers — `style_axes` (despine, hairline grid, muted
-   ticks), `finalize` (title/labels in ink tokens), `add_legend`, `format_value`.
+   ticks), `finalize` (upper-left title + optional `subtitle`/`caption` + axis
+   labels, all sized by the theme's `type_scale`), `add_legend`, `format_value`.
 5. **Return the `Axes`.** Never return `None` — callers drop down to raw matplotlib
    from the returned object.
 
@@ -88,7 +89,9 @@ These come from `mvp.md` §2/§10 and are encoded as defaults:
   "make it clearer," not more colors.
 - **Recessive chrome:** no top/right spines, solid hairline gridlines, muted ticks.
 - **Selective labels:** `label="auto"` labels only the extreme/highlighted mark —
-  never a value on every mark.
+  never a value on every mark. A small multi-series line (≤ 4) is labeled directly
+  at each line's end (series name, in the line color) and drops the legend; larger
+  sets keep the legend.
 - **One axis.** Do not add a dual-axis / secondary-y API.
 - **Dark mode is a distinct validated theme**, not an auto-inversion of the light one.
 

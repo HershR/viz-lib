@@ -160,6 +160,20 @@ def test_palette_override(sales):
     assert to_hex(ax.patches[0].get_facecolor()) == "#123456"
 
 
+def test_subtitle_and_caption_render(sales):
+    ax = viz.bar(
+        sales,
+        x="region",
+        y="revenue",
+        title="Revenue",
+        subtitle="by region, Q3",
+        caption="Source: demo",
+    )
+    texts = {t.get_text() for t in ax.texts}
+    assert "by region, Q3" in texts
+    assert "Source: demo" in texts
+
+
 def test_invalid_column_raises(sales):
     with pytest.raises(KeyError):
         viz.bar(sales, x="nope", y="revenue")

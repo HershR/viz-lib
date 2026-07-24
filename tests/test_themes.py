@@ -49,6 +49,14 @@ def test_theme_is_immutable():
         viz.LIGHT.surface = "#000000"
 
 
+def test_theme_type_scale_is_hierarchical():
+    ts = viz.LIGHT.type_scale
+    assert ts["title"] > ts["subtitle"] > ts["label"]
+    assert ts["label"] >= ts["tick"] >= ts["annotation"] > ts["caption"]
+    # Custom themes inherit the same scale by default.
+    assert viz.LIME.type_scale["title"] == ts["title"]
+
+
 def test_prop_cycle_matches_categorical():
     apply_theme(viz.LIGHT)
     cycle_colors = mpl.rcParams["axes.prop_cycle"].by_key()["color"]
