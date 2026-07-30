@@ -122,6 +122,17 @@ def test_folds_beyond_eight_series():
     assert len(ax.lines) == 8
 
 
+def test_texture_distinct_linestyles(multi):
+    ax = viz.line(multi, x="month", y="users", by="plan", texture=True)
+    styles = {ln.get_linestyle() for ln in ax.lines}
+    assert len(styles) > 1
+
+
+def test_no_texture_default_solid(multi):
+    ax = viz.line(multi, x="month", y="users", by="plan")
+    assert {ln.get_linestyle() for ln in ax.lines} == {"-"}
+
+
 def test_theme_and_palette_override(trend):
     ax = viz.line(trend, x="month", y="revenue", theme="dark")
     assert to_hex(ax.lines[0].get_color()) == viz.DARK.categorical[0]

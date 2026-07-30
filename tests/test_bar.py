@@ -160,6 +160,17 @@ def test_palette_override(sales):
     assert to_hex(ax.patches[0].get_facecolor()) == "#123456"
 
 
+def test_texture_hatches_grouped_series(tidy):
+    ax = viz.bar(tidy, x="quarter", y="responses", by="channel", texture=True)
+    hatches = {p.get_hatch() for p in ax.patches}
+    assert len(hatches) > 1  # distinct per series
+
+
+def test_no_texture_by_default(tidy):
+    ax = viz.bar(tidy, x="quarter", y="responses", by="channel")
+    assert all(p.get_hatch() is None for p in ax.patches)
+
+
 def test_subtitle_and_caption_render(sales):
     ax = viz.bar(
         sales,

@@ -76,12 +76,21 @@ BAR_GROUPED = [
     {"x": "quarter", "y": "responses", "by": "channel", "stacked": True},
     {"x": "quarter", "y": "responses", "by": "channel", "horizontal": True},
     {"x": "quarter", "y": "responses", "by": "channel", "highlight": "Web"},
+    {"x": "quarter", "y": "responses", "by": "channel", "texture": True},
+    {
+        "x": "quarter",
+        "y": "responses",
+        "by": "channel",
+        "stacked": True,
+        "texture": True,
+    },
 ]
 LINE_CASES = [
     {"x": "month", "y": "users"},
     {"x": "month", "y": "users", "by": "plan"},
     {"x": "month", "y": "users", "by": "plan", "highlight": "Pro"},
     {"x": "month", "y": "users", "by": "plan", "label": True},
+    {"x": "month", "y": "users", "by": "plan", "texture": True},
     {"x": "month"},  # count
 ]
 SCATTER_CASES = [
@@ -89,12 +98,14 @@ SCATTER_CASES = [
     {"x": "x", "y": "y", "by": "grp"},
     {"x": "x", "y": "y", "size": "w"},
     {"x": "x", "y": "y", "by": "grp", "highlight": "A"},
+    {"x": "x", "y": "y", "by": "grp", "texture": True},
 ]
 HIST_CASES = [
     {"x": "value"},
     {"x": "value", "bins": 8},
     {"x": "value", "by": "cohort"},
     {"x": "value", "by": "cohort", "highlight": "new"},
+    {"x": "value", "by": "cohort", "texture": True},
 ]
 
 

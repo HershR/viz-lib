@@ -108,6 +108,7 @@ Every chart function speaks the same keywords, so learning one teaches the rest.
 | `highlight` | value(s) of `by` to emphasize; everything else is grayed |
 | `sort` | `None` / `"asc"` / `"desc"` — order categories by value (bar) |
 | `label` | `"auto"` (default, selective) / `True` / `False` — direct value labels |
+| `texture` | opt-in secondary encoding for B&W / colorblind: hatch (bar/hist), dash (line), marker shape (scatter). Off by default |
 | `title`, `subtitle`, `caption` | upper-left title, secondary subtitle beneath it, muted source caption at the bottom |
 | `xlabel`, `ylabel` | axis label overrides (sensible defaults from column names) |
 | `theme` | theme name or `Theme` object; falls back to the global theme |

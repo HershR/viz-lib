@@ -13,8 +13,10 @@ from matplotlib.axes import Axes
 from .. import core
 from ..themes import resolve_theme
 from ._common import (
+    LINESTYLES,
     aggregate_matrix,
     as_set,
+    channel,
     fold_matrix,
     resolve_colors,
     with_palette,
@@ -33,6 +35,7 @@ def line(
     *,
     highlight=None,
     label: str | bool = "auto",
+    texture: bool = False,
     theme=None,
     palette=None,
     title: str | None = None,
@@ -56,6 +59,9 @@ def line(
       **series name** in the line's color, and the legend is dropped; larger sets
       keep a legend. Emphasis labels the highlighted line(s).
     - ``True``: label every series' endpoint value. ``False``: no direct labels.
+
+    ``texture=True`` gives each series a distinct dash pattern for black-and-white /
+    colorblind legibility (multi-series, non-emphasis only).
     """
     # 1. Validate.
     if not isinstance(df, pd.DataFrame):
@@ -81,7 +87,9 @@ def line(
     highlight_set = as_set(highlight)
     series_colors, emphasis_mode = resolve_colors(columns, th, highlight_set)
 
-    # 4. Draw.
+    # 4. Draw. Opt-in secondary encoding gives each series a distinct dash pattern
+    # so lines stay separable in grayscale (multi-series, non-emphasis only).
+    textured = texture and multi and not emphasis_mode
     ax = core.new_axes(th, ax)
     positions = matrix.index.to_numpy() if x_is_ordinal else np.arange(len(matrix))
 
@@ -94,6 +102,7 @@ def line(
             values,
             color=series_colors[j],
             linewidth=2,
+            linestyle=channel(LINESTYLES, j) if textured else "-",
             label=str(col),
             zorder=3 if highlighted else 2,
             **kwargs,
