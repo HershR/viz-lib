@@ -11,7 +11,15 @@ from matplotlib.axes import Axes
 
 from .. import core
 from ..themes import resolve_theme
-from ._common import as_set, fold_groups, resolve_colors, split_groups, with_palette
+from ._common import (
+    MARKERS,
+    as_set,
+    channel,
+    fold_groups,
+    resolve_colors,
+    split_groups,
+    with_palette,
+)
 
 # Marker area range (points^2). The floor keeps markers comfortably clickable/visible.
 _SIZE_MIN, _SIZE_MAX = 30.0, 300.0
@@ -26,9 +34,12 @@ def scatter(
     *,
     size: str | None = None,
     highlight=None,
+    texture: bool = False,
     theme=None,
     palette=None,
     title: str | None = None,
+    subtitle: str | None = None,
+    caption: str | None = None,
     xlabel: str | None = None,
     ylabel: str | None = None,
     ax: Axes | None = None,
@@ -39,7 +50,9 @@ def scatter(
     ``x`` and ``y`` are required numeric columns. ``by`` colors points by category
     (fixed palette, folded past 8). ``size`` maps a numeric column to marker area.
     ``highlight`` (matched against ``by`` groups) accents the selected group(s) in
-    the theme accent and fades the rest to gray, dropping the legend.
+    the theme accent and fades the rest to gray, dropping the legend. ``texture=True``
+    gives each group a distinct marker shape for black-and-white / colorblind
+    legibility (multi-group, non-emphasis only).
     """
     # 1. Validate.
     if not isinstance(df, pd.DataFrame):
@@ -63,9 +76,11 @@ def scatter(
     # Shared size scaling across the whole column so groups are comparable.
     size_scale = _size_scaler(df[size]) if size is not None else None
 
-    # 4. Draw.
+    # 4. Draw. Opt-in secondary encoding gives each group a distinct marker shape so
+    # groups stay separable in grayscale (multi-group, non-emphasis only).
+    textured = texture and by is not None and len(groups) > 1 and not emphasis_mode
     ax = core.new_axes(th, ax)
-    for (name, sub), color in zip(groups, colors):
+    for i, ((name, sub), color) in enumerate(zip(groups, colors)):
         s = size_scale(sub[size]) if size_scale is not None else _SIZE_DEFAULT
         if emphasis_mode:
             alpha = 0.9 if name in highlight_set else 0.45
@@ -76,6 +91,7 @@ def scatter(
             sub[y],
             s=s,
             color=color,
+            marker=channel(MARKERS, i) if textured else "o",
             edgecolor=th.surface,
             linewidth=0.6,
             alpha=alpha,
@@ -91,6 +107,8 @@ def scatter(
         ax,
         th,
         title=title,
+        subtitle=subtitle,
+        caption=caption,
         xlabel=xlabel if xlabel is not None else x,
         ylabel=ylabel if ylabel is not None else y,
     )

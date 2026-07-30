@@ -38,6 +38,7 @@ python examples/scatter_relationships.py
 python examples/distributions.py
 python examples/theming.py
 python examples/theme_lime.py
+python examples/black_and_white.py
 ```
 
 Or run them all at once:
@@ -64,6 +65,7 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 | [`distributions.py`](./distributions.py) | hist | A single distribution, overlaid groups on shared bins, emphasis via `highlight=` |
 | [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
 | [`theme_lime.py`](./theme_lime.py) | any | The built-in "Lime Green" theme (`lime` / `lime-dark`) |
+| [`black_and_white.py`](./black_and_white.py) | bar, line | `texture=` secondary encoding, shown in color and desaturated to grayscale |
 
 ## Gallery
 
@@ -126,6 +128,15 @@ The built-in dark theme (its own validated steps, not an inversion) and a custom
 
 ![dark theme](./images/theme_dark.png)
 ![custom theme](./images/theme_custom.png)
+
+### `black_and_white.py`
+`texture=True` adds a non-color channel — hatches on bars, dash patterns on lines —
+so series survive grayscale printing and read for colorblind viewers. Below: the
+color render, then the same figure desaturated to grayscale, where every series is
+still distinct.
+
+![texture in color](./images/black_and_white_color.png)
+![texture in grayscale](./images/black_and_white_gray.png)
 
 ### `theme_lime.py`
 The built-in **Lime Green** theme (ported from a shadcn theme). The lime primary

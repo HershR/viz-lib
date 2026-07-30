@@ -37,7 +37,12 @@ def style_axes(ax: Axes, theme: Theme, *, grid_axis: str | None = "y") -> None:
         ax.spines[side].set_color(theme.baseline)
         ax.spines[side].set_linewidth(1.0)
 
-    ax.tick_params(colors=theme.muted, labelcolor=theme.secondary_ink, length=0)
+    ax.tick_params(
+        colors=theme.muted,
+        labelcolor=theme.secondary_ink,
+        labelsize=theme.type_scale["tick"],
+        length=0,
+    )
 
     if grid_axis:
         ax.grid(
@@ -58,21 +63,56 @@ def finalize(
     title: str | None,
     xlabel: str | None,
     ylabel: str | None,
+    subtitle: str | None = None,
+    caption: str | None = None,
 ) -> None:
-    """Apply title and axis labels with the theme's ink colors."""
+    """Apply the title, optional subtitle/caption, and axis labels.
+
+    The title is a bold, left-justified upper-left line in primary ink; the subtitle
+    sits just beneath it in secondary ink; the caption is a muted source line at the
+    lower-left. All sizes come from the theme's type scale so the hierarchy is
+    deliberate (title > subtitle > axis label > tick > annotation > caption).
+    """
+    scale = theme.type_scale
     if title:
         ax.set_title(
             title,
             color=theme.primary_ink,
-            fontsize=13,
+            fontsize=scale["title"],
             fontweight="bold",
             loc="left",
-            pad=12,
+            pad=28 if subtitle else 12,
+        )
+    if subtitle:
+        ax.annotate(
+            subtitle,
+            xy=(0, 1),
+            xycoords="axes fraction",
+            xytext=(0, 8),
+            textcoords="offset points",
+            ha="left",
+            va="bottom",
+            color=theme.secondary_ink,
+            fontsize=scale["subtitle"],
+            annotation_clip=False,
+        )
+    if caption:
+        ax.annotate(
+            caption,
+            xy=(0, 0),
+            xycoords="axes fraction",
+            xytext=(0, -40),
+            textcoords="offset points",
+            ha="left",
+            va="top",
+            color=theme.muted,
+            fontsize=scale["caption"],
+            annotation_clip=False,
         )
     if xlabel is not None:
-        ax.set_xlabel(xlabel, color=theme.secondary_ink)
+        ax.set_xlabel(xlabel, color=theme.secondary_ink, fontsize=scale["label"])
     if ylabel is not None:
-        ax.set_ylabel(ylabel, color=theme.secondary_ink)
+        ax.set_ylabel(ylabel, color=theme.secondary_ink, fontsize=scale["label"])
 
 
 def add_legend(ax: Axes, theme: Theme) -> None:
@@ -80,7 +120,7 @@ def add_legend(ax: Axes, theme: Theme) -> None:
     legend = ax.legend(
         frameon=False,
         labelcolor=theme.secondary_ink,
-        fontsize=10,
+        fontsize=theme.type_scale["legend"],
         loc="best",
     )
     if legend is not None:

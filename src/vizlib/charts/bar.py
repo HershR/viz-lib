@@ -14,8 +14,11 @@ from matplotlib.axes import Axes
 from .. import core
 from ..themes import resolve_theme
 from ._common import (
+    HATCHES,
     aggregate_matrix,
     as_set,
+    channel,
+    darken,
     fold_matrix,
     resolve_colors,
     with_palette,
@@ -33,9 +36,12 @@ def bar(
     sort: str | None = None,
     highlight=None,
     label: str | bool = "auto",
+    texture: bool = False,
     theme=None,
     palette=None,
     title: str | None = None,
+    subtitle: str | None = None,
+    caption: str | None = None,
     xlabel: str | None = None,
     ylabel: str | None = None,
     ax: Axes | None = None,
@@ -63,6 +69,10 @@ def bar(
     label : {"auto", True, False}
         Direct value labels. "auto" labels the single largest bar of a one-series
         chart (or the highlighted marks); ``True`` labels every bar.
+    texture : bool
+        Opt-in secondary encoding: give each series a distinct hatch so the chart
+        stays legible in black and white / for colorblind readers. Multi-series
+        non-emphasis charts only; off by default.
     theme : Theme or str, optional
         Per-call theme override; falls back to the global theme.
     palette : sequence of colors, optional
@@ -122,6 +132,15 @@ def bar(
     span_kw = "height" if horizontal else "width"
 
     drawn = []  # (bar_container, value_array) for labeling
+    # Opt-in secondary encoding: a per-series hatch (drawn in a darker shade of the
+    # fill) so series stay distinct in grayscale. Only for genuine multi-series,
+    # non-emphasis charts.
+    textured = texture and multi and not emphasis_mode
+
+    def _texture_kw(j):
+        if not textured:
+            return {}
+        return {"hatch": channel(HATCHES, j), "edgecolor": darken(series_colors[j])}
 
     if by is None:
         # Single series.
@@ -136,14 +155,16 @@ def bar(
         base_kw = "left" if horizontal else "bottom"
         for j, col in enumerate(columns):
             values = matrix[col].to_numpy(dtype=float)
+            tex = _texture_kw(j)
             container = plot(
                 positions,
                 values,
                 **{span_kw: 0.8, base_kw: offset},
                 color=series_colors[j],
                 label=str(col),
-                edgecolor=th.surface,
+                edgecolor=tex.get("edgecolor", th.surface),
                 linewidth=1.5,
+                hatch=tex.get("hatch"),
                 **kwargs,
             )
             drawn.append((container, values))
@@ -161,6 +182,7 @@ def bar(
                 **{span_kw: bar_span},
                 color=series_colors[j],
                 label=str(col),
+                **_texture_kw(j),
                 **kwargs,
             )
             drawn.append((container, values))
@@ -199,7 +221,15 @@ def bar(
     else:
         xlabel = xlabel if xlabel is not None else default_cat_label
         ylabel = ylabel if ylabel is not None else default_val_label
-    core.finalize(ax, th, title=title, xlabel=xlabel, ylabel=ylabel)
+    core.finalize(
+        ax,
+        th,
+        title=title,
+        subtitle=subtitle,
+        caption=caption,
+        xlabel=xlabel,
+        ylabel=ylabel,
+    )
 
     return ax
 
@@ -240,7 +270,7 @@ def _apply_labels(
                 ha=ha,
                 va=va,
                 color=theme.secondary_ink,
-                fontsize=9,
+                fontsize=theme.type_scale["annotation"],
             )
 
     if label is True:

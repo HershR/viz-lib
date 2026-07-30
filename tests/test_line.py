@@ -42,12 +42,37 @@ def test_single_series_one_line_slot_one(trend):
     assert to_hex(ax.lines[0].get_color()) == viz.LIGHT.categorical[0]
 
 
-def test_multi_series_lines_and_legend(multi):
+def test_multi_series_colors(multi):
     ax = viz.line(multi, x="month", y="users", by="plan")
     assert len(ax.lines) == 2
     colors = {to_hex(ln.get_color()) for ln in ax.lines}
     assert colors == {viz.LIGHT.categorical[0], viz.LIGHT.categorical[1]}
+
+
+def test_small_multi_series_direct_labeled_no_legend(multi):
+    # <= 4 series + label="auto": lines are labeled by name at their ends, and the
+    # legend is dropped (direct labeling beats a legend).
+    ax = viz.line(multi, x="month", y="users", by="plan")
+    assert ax.get_legend() is None
+    assert {"Pro", "Free"} <= {t.get_text() for t in ax.texts}
+
+
+def test_many_series_keep_legend():
+    df = pd.DataFrame(
+        {
+            "t": list(range(4)) * 5,
+            "g": sum(([f"s{i}"] * 4 for i in range(5)), []),
+            "v": list(range(20)),
+        }
+    )
+    ax = viz.line(df, x="t", y="v", by="g")  # 5 series > direct-label cap
     assert ax.get_legend() is not None
+
+
+def test_label_false_multi_keeps_legend_no_labels(multi):
+    ax = viz.line(multi, x="month", y="users", by="plan", label=False)
+    assert ax.get_legend() is not None
+    assert len(ax.texts) == 0
 
 
 def test_numeric_x_sorted(trend):
@@ -70,11 +95,6 @@ def test_highlight_emphasis(multi):
 def test_label_auto_single_endpoint(trend):
     ax = viz.line(trend, x="month", y="revenue", label="auto")
     assert [t.get_text() for t in ax.texts] == ["20"]  # last point
-
-
-def test_label_false_no_labels(multi):
-    ax = viz.line(multi, x="month", y="users", by="plan", label=False)
-    assert len(ax.texts) == 0
 
 
 def test_label_true_labels_each_endpoint(multi):
@@ -100,6 +120,17 @@ def test_folds_beyond_eight_series():
     with pytest.warns(UserWarning, match="folded"):
         ax = viz.line(df, x="t", y="v", by="g")
     assert len(ax.lines) == 8
+
+
+def test_texture_distinct_linestyles(multi):
+    ax = viz.line(multi, x="month", y="users", by="plan", texture=True)
+    styles = {ln.get_linestyle() for ln in ax.lines}
+    assert len(styles) > 1
+
+
+def test_no_texture_default_solid(multi):
+    ax = viz.line(multi, x="month", y="users", by="plan")
+    assert {ln.get_linestyle() for ln in ax.lines} == {"-"}
 
 
 def test_theme_and_palette_override(trend):

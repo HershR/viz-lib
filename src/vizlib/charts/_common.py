@@ -8,9 +8,38 @@ from __future__ import annotations
 import warnings
 
 import pandas as pd
+from matplotlib.colors import to_rgb
 
 # Series past this count are folded into "Other" rather than generating new hues.
 MAX_SERIES = 8
+
+# Secondary-encoding channels for the opt-in ``texture=`` mode — fixed ordered
+# sequences (parallel to the fixed categorical order) so a series keeps the same
+# non-color cue regardless of how many series are present. Used only for print /
+# colorblind legibility, never by default. Slot 1 is the plain form (solid).
+HATCHES = ("", "//", "\\\\", "xx", "--", "||", "..", "++")
+LINESTYLES = (
+    "-",
+    "--",
+    "-.",
+    ":",
+    (0, (3, 1, 1, 1)),
+    (0, (5, 1)),
+    (0, (1, 1)),
+    (0, (4, 2)),
+)
+MARKERS = ("o", "s", "^", "D", "v", "P", "X", "*")
+
+
+def channel(seq, i):
+    """Pick the i-th entry of a secondary-encoding sequence, cycling if needed."""
+    return seq[i % len(seq)]
+
+
+def darken(color, factor: float = 0.55):
+    """Return a darker shade of ``color`` (for a hatch/edge that reads in grayscale)."""
+    r, g, b = to_rgb(color)
+    return (r * factor, g * factor, b * factor)
 
 
 def as_set(value) -> set:
