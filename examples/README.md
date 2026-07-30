@@ -66,7 +66,7 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 | [`distributions.py`](./distributions.py) | hist | A single distribution, overlaid groups on shared bins, emphasis via `highlight=` |
 | [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
 | [`theme_lime.py`](./theme_lime.py) | any | The built-in "Lime Green" theme (`lime` / `lime-dark`) |
-| [`theme_shadcn.py`](./theme_shadcn.py) | any | The shadcn aesthetic (`shadcn` / `shadcn-dark`) — rounded bars, no spines |
+| [`theme_shadcn.py`](./theme_shadcn.py) | any | The shadcn aesthetic (`shadcn` / `shadcn-dark`) — shadcn palette, rounded bars, no spines/y-axis |
 | [`black_and_white.py`](./black_and_white.py) | bar, line | `texture=` secondary encoding, shown in color and desaturated to grayscale |
 
 ## Gallery
@@ -151,9 +151,9 @@ distinct set. Light (`lime`) and dark (`lime-dark`) variants.
 ![lime dark scatter](./images/lime_dark_scatter.png)
 
 ### `theme_shadcn.py`
-The **shadcn** / **shadcn-dark** theme mimics the shadcn charts look — rounded bar
-ends, no axis spines, a faint horizontal-only grid, muted labels — over vizlib's
-validated palette (only the chrome/shape changes).
+The **shadcn** / **shadcn-dark** theme mimics the shadcn charts look — shadcn's own
+chart palette (coral/teal light, blue/green dark), rounded bar ends, no axis spines,
+a hidden value axis with a faint horizontal grid, and small muted labels.
 
 ![shadcn bar](./images/shadcn_bar.png)
 ![shadcn grouped](./images/shadcn_grouped.png)

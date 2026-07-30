@@ -62,6 +62,7 @@ class Theme:
     # Chrome/shape style knobs (defaults preserve the classic look).
     axis_lines: bool = True  # draw the left/bottom hairline spines
     bar_radius: float = 0.0  # fraction of bar thickness to round the data-end corners
+    value_axis: bool = True  # show the value-axis ticks/labels (shadcn hides them)
 
     @classmethod
     def from_mode(cls, mode: str) -> "Theme":
@@ -88,10 +89,21 @@ DARK = Theme.from_mode("dark")
 # "Lime Green" — a custom theme ported from a shadcn theme (lime primary).
 LIME = Theme.from_mode("lime")
 LIME_DARK = Theme.from_mode("lime-dark")
-# shadcn chart aesthetic: the validated palette + shadcn chrome — rounded bar ends
-# and no axis spines (faint horizontal grid, muted labels carry the rest).
-SHADCN = replace(LIGHT, name="shadcn", axis_lines=False, bar_radius=0.22)
-SHADCN_DARK = replace(DARK, name="shadcn-dark", axis_lines=False, bar_radius=0.22)
+# shadcn chart aesthetic: shadcn's own chart palette + zinc neutrals + Arial-metric
+# sans, with shadcn chrome — rounded bar ends, no axis spines, and a hidden value
+# axis (a faint horizontal grid carries it).
+SHADCN = replace(
+    Theme.from_mode("shadcn"),
+    axis_lines=False,
+    bar_radius=0.18,
+    value_axis=False,
+)
+SHADCN_DARK = replace(
+    Theme.from_mode("shadcn-dark"),
+    axis_lines=False,
+    bar_radius=0.18,
+    value_axis=False,
+)
 
 _BUILTIN: dict[str, Theme] = {
     "light": LIGHT,

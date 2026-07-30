@@ -193,6 +193,8 @@ def test_shadcn_theme_rounds_bars_and_hides_spines(sales):
     assert all(isinstance(p, PathPatch) for p in ax.patches)
     assert ax.spines["left"].get_visible() is False
     assert ax.spines["bottom"].get_visible() is False
+    # Value (y) axis is hidden: no y tick labels.
+    assert all(t.get_text() == "" for t in ax.get_yticklabels())
 
 
 def test_default_theme_keeps_square_bars(sales):

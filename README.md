@@ -130,26 +130,27 @@ with viz.theme("dark"):     # scoped override
     viz.bar(sales, x="region", y="revenue")
 ```
 
-Six themes are built in — **light**, **dark**, the custom **lime** / **lime-dark**,
-and **shadcn** / **shadcn-dark** — each with a validated categorical, sequential, and
-diverging palette plus recessive chrome tokens and a deliberate type scale. See
-[`mvp.md`](./mvp.md#5-theming-system) for the palette values.
+Six themes are built in — **light**, **dark** (vizlib's validated colorblind-safe
+palette), the custom **lime** / **lime-dark**, and **shadcn** / **shadcn-dark** — each
+with a categorical, sequential, and diverging palette plus recessive chrome tokens
+and a deliberate type scale. See [`mvp.md`](./mvp.md#5-theming-system) for values.
 
-The **lime** / **lime-dark** theme ("Lime Green", ported from a shadcn theme) puts a
-lime primary/accent over light and dark surfaces. The **shadcn** / **shadcn-dark**
-theme mimics the shadcn charts aesthetic — **rounded bar ends and no axis spines**,
-over vizlib's validated palette:
+The **shadcn** / **shadcn-dark** theme mimics the shadcn charts look — shadcn's own
+chart palette (coral/teal/slate/… light, blue/green/… dark), **rounded bar ends, no
+axis spines, and a hidden value axis** (a faint horizontal grid carries it), in an
+Arial-metric sans. The **lime** / **lime-dark** theme puts a lime accent over light
+and dark surfaces. (Both custom palettes are not colorblind-validated.)
 
 ```python
-viz.bar(sales, x="region", y="revenue", theme="lime")          # lime accent
 viz.bar(sales, x="region", y="revenue", theme="shadcn")        # rounded, borderless
 with viz.theme("shadcn-dark"):
     viz.line(usage, x="month", y="users", by="plan")
 ```
 
-A `Theme` also exposes two chrome/shape knobs — `axis_lines` (draw the left/bottom
-spines) and `bar_radius` (round bar ends) — so you can build your own look with
-`dataclasses.replace(viz.LIGHT, ...)`, or pass `palette=` to any chart.
+A `Theme` also exposes three chrome/shape knobs — `axis_lines` (draw the left/bottom
+spines), `bar_radius` (round bar ends), and `value_axis` (show the value-axis ticks)
+— so you can build your own look with `dataclasses.replace(viz.LIGHT, ...)`, or pass
+`palette=` to any chart.
 
 ---
 

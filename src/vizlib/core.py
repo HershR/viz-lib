@@ -24,12 +24,20 @@ def new_axes(theme: Theme, ax: Axes | None) -> Axes:
     return ax
 
 
-def style_axes(ax: Axes, theme: Theme, *, grid_axis: str | None = "y") -> None:
+def style_axes(
+    ax: Axes,
+    theme: Theme,
+    *,
+    grid_axis: str | None = "y",
+    value_axis: str | None = None,
+) -> None:
     """Apply recessive chrome to ``ax``: surface, spines, ticks, and hairline grid.
 
     ``grid_axis`` is "y" (default), "x", "both", or ``None`` for no grid. Gridlines
     are solid hairlines one shade off the surface; the top/right spines are removed
-    and the remaining spines are hairlines in the baseline token.
+    and the remaining spines are hairlines in the baseline token (hidden entirely when
+    ``theme.axis_lines`` is False). ``value_axis`` ("y"/"x") names the value axis; when
+    ``theme.value_axis`` is False its tick labels are dropped (the grid carries it).
     """
     ax.set_facecolor(theme.surface)
 
@@ -49,6 +57,12 @@ def style_axes(ax: Axes, theme: Theme, *, grid_axis: str | None = "y") -> None:
         labelsize=theme.type_scale["tick"],
         length=0,
     )
+
+    if value_axis and not theme.value_axis:
+        if value_axis == "y":
+            ax.tick_params(axis="y", labelleft=False, left=False)
+        elif value_axis == "x":
+            ax.tick_params(axis="x", labelbottom=False, bottom=False)
 
     if grid_axis:
         ax.grid(

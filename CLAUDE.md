@@ -64,11 +64,13 @@ the same five-step pipeline, and new chart types must too:
   the 8-hue categorical order, sequential/diverging ramps, and chrome/ink tokens.
 - `themes.py` — the immutable `Theme` dataclass assembled from `palettes`; the
   built-in themes `LIGHT`/`DARK`, `LIME`/`LIME_DARK`, and `SHADCN`/`SHADCN_DARK`
-  (shadcn look = validated palette + chrome knobs `axis_lines=False`,
-  `bar_radius>0`, built via `dataclasses.replace`); global theme state
-  (`set_theme`/`get_theme`/`theme` context manager) and `apply_theme` (rcParams).
-  `Theme` carries chrome/shape knobs — `axis_lines` (left/bottom spines) and
-  `bar_radius` (rounded bar ends) — that `core.style_axes`/`core.round_bars` honor.
+  (shadcn look = shadcn's own chart palette + chrome knobs `axis_lines=False`,
+  `bar_radius>0`, `value_axis=False`, on `from_mode("shadcn")` via
+  `dataclasses.replace`); global theme state (`set_theme`/`get_theme`/`theme`
+  context manager) and `apply_theme` (rcParams). `Theme` carries chrome/shape knobs
+  — `axis_lines` (left/bottom spines), `bar_radius` (rounded bar ends), and
+  `value_axis` (show value-axis ticks) — that `core.style_axes`/`core.round_bars`
+  honor.
 - `core.py` — theme-agnostic post-styling helpers shared by all charts.
 - `charts/_common.py` — data-shaping and color logic shared across charts:
   `aggregate_matrix`/`fold_matrix` (bar, line), `split_groups`/`fold_groups`

@@ -163,3 +163,56 @@ MUTED["lime-dark"] = "#64748b"
 GRIDLINE["lime-dark"] = "#1e293b"
 BASELINE["lime-dark"] = "#334155"
 FONT_FAMILY["lime-dark"] = ("Inter", "system-ui", "sans-serif")
+
+# --- "shadcn" theme: shadcn's chart palette + zinc neutrals -------------------
+# Uses shadcn's actual --chart-1..5 colors (light: coral/teal/slate/gold/orange;
+# dark: blue/green/orange/violet/pink), extended to the fixed 8. Not CVD-validated
+# (documented, like lime). Paired with shadcn chrome via the theme's style knobs
+# (rounded bars, no spines, hidden value axis) and an Arial-metric sans.
+_SHADCN_FONT = ("Liberation Sans", "Arial", "DejaVu Sans", "sans-serif")
+
+# Light
+CATEGORICAL["shadcn"] = (
+    "#e76e50",  # 1 coral   (chart-1)
+    "#2a9d8f",  # 2 teal    (chart-2)
+    "#274754",  # 3 slate   (chart-3)
+    "#e8c468",  # 4 gold    (chart-4)
+    "#f4a261",  # 5 orange  (chart-5)
+    "#5b8ff9",  # 6 blue
+    "#9270ca",  # 7 violet
+    "#e23670",  # 8 pink
+)
+SEQUENTIAL["shadcn"] = SEQUENTIAL["light"]
+DIVERGING["shadcn"] = ("#e76e50", "#f1f0ea", "#2a9d8f")
+EMPHASIS["shadcn"] = "#e76e50"
+DEEMPHASIS["shadcn"] = "#a1a1aa"
+SURFACE["shadcn"] = "#ffffff"
+PRIMARY_INK["shadcn"] = "#0a0a0a"
+SECONDARY_INK["shadcn"] = "#71717a"
+MUTED["shadcn"] = "#a1a1aa"
+GRIDLINE["shadcn"] = "#e4e4e7"
+BASELINE["shadcn"] = "#e4e4e7"
+FONT_FAMILY["shadcn"] = _SHADCN_FONT
+
+# Dark
+CATEGORICAL["shadcn-dark"] = (
+    "#2662d9",  # 1 blue    (chart-1)
+    "#2eb88a",  # 2 green   (chart-2)
+    "#e88c30",  # 3 orange  (chart-3)
+    "#af57db",  # 4 violet  (chart-4)
+    "#e23670",  # 5 pink    (chart-5)
+    "#2a9d8f",  # 6 teal
+    "#e8c468",  # 7 gold
+    "#94a3b8",  # 8 slate
+)
+SEQUENTIAL["shadcn-dark"] = SEQUENTIAL["dark"]
+DIVERGING["shadcn-dark"] = ("#e23670", "#27272a", "#2eb88a")
+EMPHASIS["shadcn-dark"] = "#2662d9"
+DEEMPHASIS["shadcn-dark"] = "#52525b"
+SURFACE["shadcn-dark"] = "#0a0a0a"
+PRIMARY_INK["shadcn-dark"] = "#fafafa"
+SECONDARY_INK["shadcn-dark"] = "#a1a1aa"
+MUTED["shadcn-dark"] = "#71717a"
+GRIDLINE["shadcn-dark"] = "#27272a"
+BASELINE["shadcn-dark"] = "#27272a"
+FONT_FAMILY["shadcn-dark"] = _SHADCN_FONT

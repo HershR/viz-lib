@@ -102,9 +102,12 @@ def hist(
         containers.append(patches)
 
     # 5. Post-style.
-    core.style_axes(ax, th, grid_axis="y")
+    core.style_axes(ax, th, grid_axis="y", value_axis="y")
     if multi and not emphasis_mode:
         core.add_legend(ax, th)
+    final_ylabel = ylabel if ylabel is not None else "count"
+    if not th.value_axis:
+        final_ylabel = None  # hidden value axis -> no value label
     core.finalize(
         ax,
         th,
@@ -112,7 +115,7 @@ def hist(
         subtitle=subtitle,
         caption=caption,
         xlabel=xlabel if xlabel is not None else x,
-        ylabel=ylabel if ylabel is not None else "count",
+        ylabel=final_ylabel,
     )
 
     # Rounded bar ends (shadcn-style themes).

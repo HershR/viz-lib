@@ -49,23 +49,25 @@ def test_theme_is_immutable():
         viz.LIGHT.surface = "#000000"
 
 
-def test_shadcn_themes_resolve_and_carry_validated_palette():
+def test_shadcn_themes_resolve_with_shadcn_palette():
     from vizlib.themes import resolve_theme
 
     assert resolve_theme("shadcn") is viz.SHADCN
     assert resolve_theme("shadcn-dark") is viz.SHADCN_DARK
-    # Same validated palette as light/dark — only the chrome/shape changes.
-    assert viz.SHADCN.categorical == viz.LIGHT.categorical
-    assert viz.SHADCN_DARK.categorical == viz.DARK.categorical
+    # shadcn uses its own chart palette (coral lead in light), not the blue default.
+    assert viz.SHADCN.categorical[0] == "#e76e50"
+    assert viz.SHADCN.categorical != viz.LIGHT.categorical
 
 
 def test_shadcn_style_knobs():
     for th in (viz.SHADCN, viz.SHADCN_DARK):
         assert th.axis_lines is False
         assert th.bar_radius > 0
-    # Classic themes keep the default chrome.
+        assert th.value_axis is False
+    # Classic themes keep the default chrome and value axis.
     assert viz.LIGHT.axis_lines is True
     assert viz.LIGHT.bar_radius == 0.0
+    assert viz.LIGHT.value_axis is True
 
 
 def test_theme_type_scale_is_hierarchical():
