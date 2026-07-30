@@ -67,6 +67,12 @@ def test_highlight_emphasis(dist):
     assert ax.get_legend() is None  # legend dropped in emphasis mode
 
 
+def test_texture_hatches_groups(dist):
+    ax = viz.hist(dist, x="value", by="cohort", bins=6, texture=True)
+    hatches = {p.get_hatch() for p in ax.patches}
+    assert len(hatches) > 1
+
+
 def test_theme_and_palette_override(dist):
     ax = viz.hist(dist, x="value", bins=5, theme="dark")
     assert to_hex(ax.patches[0].get_facecolor()) == viz.DARK.categorical[0]

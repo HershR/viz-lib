@@ -67,6 +67,14 @@ def test_highlight_emphasis(points):
     assert ax.get_legend() is None  # legend dropped in emphasis mode
 
 
+def test_texture_distinct_markers(points):
+    ax = viz.scatter(points, x="height", y="weight", by="group", texture=True)
+    p0 = ax.collections[0].get_paths()[0].vertices
+    p1 = ax.collections[1].get_paths()[0].vertices
+    # Different marker shapes -> different path vertices.
+    assert p0.shape != p1.shape or not np.array_equal(p0, p1)
+
+
 def test_y_is_required(points):
     with pytest.raises(TypeError):
         viz.scatter(points, x="height")  # missing y

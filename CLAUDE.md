@@ -94,6 +94,11 @@ These come from `mvp.md` §2/§10 and are encoded as defaults:
   sets keep the legend.
 - **One axis.** Do not add a dual-axis / secondary-y API.
 - **Dark mode is a distinct validated theme**, not an auto-inversion of the light one.
+- **Texture is opt-in, never default.** `texture=True` adds a secondary-encoding
+  channel for black-and-white / colorblind legibility — hatches (bar/hist), dash
+  patterns (line), marker shapes (scatter), from fixed ordered sets in
+  `charts/_common.py`. Applied only to multi-series, non-emphasis charts; emphasis
+  is already lightness-distinct so it stays untextured.
 
 ## Branches & roadmap
 

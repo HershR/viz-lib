@@ -11,7 +11,16 @@ from matplotlib.axes import Axes
 
 from .. import core
 from ..themes import resolve_theme
-from ._common import as_set, fold_groups, resolve_colors, split_groups, with_palette
+from ._common import (
+    HATCHES,
+    as_set,
+    channel,
+    darken,
+    fold_groups,
+    resolve_colors,
+    split_groups,
+    with_palette,
+)
 
 
 def hist(
@@ -21,6 +30,7 @@ def hist(
     *,
     bins="auto",
     highlight=None,
+    texture: bool = False,
     theme=None,
     palette=None,
     title: str | None = None,
@@ -38,6 +48,8 @@ def hist(
     ("auto" or an int); a shared set of edges is computed so overlaid groups align.
     ``highlight`` (matched against ``by`` groups) accents the selected distribution(s)
     in the theme accent and fades the rest to gray, dropping the legend.
+    ``texture=True`` gives each distribution a distinct hatch for black-and-white /
+    colorblind legibility (multi-group, non-emphasis only).
     """
     # 1. Validate.
     if not isinstance(df, pd.DataFrame):
@@ -63,10 +75,12 @@ def hist(
     edges = np.histogram_bin_edges(all_values, bins=bins)
 
     # 4. Draw. Single group is opaque; overlaid groups are translucent. In emphasis
-    #    mode the highlighted distribution stays bold and the rest fade back.
+    #    mode the highlighted distribution stays bold and the rest fade back. Opt-in
+    #    texture gives each group a distinct hatch for grayscale legibility.
     multi = by is not None and len(groups) > 1
+    textured = texture and multi and not emphasis_mode
     ax = core.new_axes(th, ax)
-    for (name, sub), color in zip(groups, colors):
+    for i, ((name, sub), color) in enumerate(zip(groups, colors)):
         values = sub[x].to_numpy(dtype=float)
         values = values[~np.isnan(values)]
         if emphasis_mode:
@@ -78,8 +92,9 @@ def hist(
             bins=edges,
             color=color,
             alpha=alpha,
-            edgecolor=th.surface,
+            edgecolor=darken(color) if textured else th.surface,
             linewidth=0.8,
+            hatch=channel(HATCHES, i) if textured else None,
             label=(str(name) if name is not None else None),
             **kwargs,
         )
