@@ -22,8 +22,9 @@ sales = pd.DataFrame(
     }
 )
 
-ax = viz.bar(sales, x="region", y="revenue", highlight="East",
-             title="East leads the quarter")
+ax = viz.bar(
+    sales, x="region", y="revenue", highlight="East", title="East leads the quarter"
+)
 
 ax.figure.savefig(IMAGES / "emphasis.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "emphasis.png")

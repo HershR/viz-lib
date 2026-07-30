@@ -21,13 +21,24 @@ survey = pd.DataFrame(
 )
 
 # Grouped: bars sit side by side, one categorical hue per series, with a legend.
-ax = viz.bar(survey, x="quarter", y="responses", by="channel",
-             title="Responses by channel (grouped)")
+ax = viz.bar(
+    survey,
+    x="quarter",
+    y="responses",
+    by="channel",
+    title="Responses by channel (grouped)",
+)
 ax.figure.savefig(IMAGES / "grouped_bar.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "grouped_bar.png")
 
 # Stacked: same data, stacked=True. A 2px surface gap separates the segments.
-ax = viz.bar(survey, x="quarter", y="responses", by="channel", stacked=True,
-             title="Responses by channel (stacked)")
+ax = viz.bar(
+    survey,
+    x="quarter",
+    y="responses",
+    by="channel",
+    stacked=True,
+    title="Responses by channel (stacked)",
+)
 ax.figure.savefig(IMAGES / "stacked_bar.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "stacked_bar.png")

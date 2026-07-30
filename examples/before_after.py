@@ -41,16 +41,16 @@ fig, axes = plt.subplots(2, 2, figsize=(13, 9))
 # --- Row 1: bar ---------------------------------------------------------------
 axes[0, 0].bar(sales["region"], sales["revenue"])
 axes[0, 0].set_title("matplotlib · bar")
-viz.bar(sales, x="region", y="revenue", sort="desc", ax=axes[0, 1],
-        title="vizlib · bar")
+viz.bar(
+    sales, x="region", y="revenue", sort="desc", ax=axes[0, 1], title="vizlib · bar"
+)
 
 # --- Row 2: multi-series line -------------------------------------------------
 for plan, grp in usage.groupby("plan"):
     axes[1, 0].plot(grp["month"], grp["users"], label=plan)
 axes[1, 0].legend()
 axes[1, 0].set_title("matplotlib · line")
-viz.line(usage, x="month", y="users", by="plan", ax=axes[1, 1],
-         title="vizlib · line")
+viz.line(usage, x="month", y="users", by="plan", ax=axes[1, 1], title="vizlib · line")
 
 fig.suptitle("matplotlib default   vs   vizlib", fontsize=15, fontweight="bold")
 fig.tight_layout()

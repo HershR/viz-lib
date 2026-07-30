@@ -186,9 +186,12 @@ with viz.theme("dark"):           # scoped override
     viz.bar(df, x="region", y="sales")
 ```
 
-A `Theme` is a small dataclass bundling palettes + chrome + typography. Applying a
-theme sets matplotlib `rcParams` and is what each chart function reads before
-drawing. Two themes ship in v1: **light** and **dark**.
+A `Theme` is a small dataclass bundling palettes + chrome + typography + shape knobs
+(`axis_lines`, `bar_radius`). Applying a theme sets matplotlib `rcParams` and is what
+each chart function reads before drawing. Six themes are built in: **light**,
+**dark**, **lime** / **lime-dark** (Lime Green), and **shadcn** / **shadcn-dark**
+(rounded bar ends, no axis spines — the shadcn charts aesthetic over the validated
+palette).
 
 ### 5.2 Palettes (validated default)
 

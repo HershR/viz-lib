@@ -42,21 +42,57 @@ points = pd.DataFrame(
 def save(ax, name, dark=False):
     surface = viz.LIME_DARK.surface if dark else viz.LIME.surface
     ax.figure.set_facecolor(surface)
-    ax.figure.savefig(
-        IMAGES / name, dpi=120, bbox_inches="tight", facecolor=surface
-    )
+    ax.figure.savefig(IMAGES / name, dpi=120, bbox_inches="tight", facecolor=surface)
     print("wrote", IMAGES / name)
 
 
 # Light: the lime primary on a single-series bar, and the curated multi-series set.
-save(viz.bar(sales, x="region", y="revenue", sort="desc", theme="lime",
-             title="Revenue by region (lime)"), "lime_bar.png")
-save(viz.bar(usage, x="month", y="active_users", by="plan", theme="lime",
-             title="Active users by plan (lime)"), "lime_grouped.png")
+save(
+    viz.bar(
+        sales,
+        x="region",
+        y="revenue",
+        sort="desc",
+        theme="lime",
+        title="Revenue by region (lime)",
+    ),
+    "lime_bar.png",
+)
+save(
+    viz.bar(
+        usage,
+        x="month",
+        y="active_users",
+        by="plan",
+        theme="lime",
+        title="Active users by plan (lime)",
+    ),
+    "lime_grouped.png",
+)
 
 # Dark: same theme family on the deep slate surface.
-save(viz.line(usage, x="month", y="active_users", by="plan", highlight="Pro",
-              theme="lime-dark", title="Pro is pulling ahead (lime-dark)"),
-     "lime_dark_line.png", dark=True)
-save(viz.scatter(points, x="x", y="y", by="segment", theme="lime-dark",
-                 title="Segments (lime-dark)"), "lime_dark_scatter.png", dark=True)
+save(
+    viz.line(
+        usage,
+        x="month",
+        y="active_users",
+        by="plan",
+        highlight="Pro",
+        theme="lime-dark",
+        title="Pro is pulling ahead (lime-dark)",
+    ),
+    "lime_dark_line.png",
+    dark=True,
+)
+save(
+    viz.scatter(
+        points,
+        x="x",
+        y="y",
+        by="segment",
+        theme="lime-dark",
+        title="Segments (lime-dark)",
+    ),
+    "lime_dark_scatter.png",
+    dark=True,
+)

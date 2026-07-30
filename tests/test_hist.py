@@ -67,6 +67,14 @@ def test_highlight_emphasis(dist):
     assert ax.get_legend() is None  # legend dropped in emphasis mode
 
 
+def test_shadcn_theme_rounds_bins(dist):
+    from matplotlib.patches import PathPatch
+
+    ax = viz.hist(dist, x="value", bins=6, theme="shadcn")
+    assert any(isinstance(p, PathPatch) for p in ax.patches)
+    assert ax.spines["left"].get_visible() is False
+
+
 def test_texture_hatches_groups(dist):
     ax = viz.hist(dist, x="value", by="cohort", bins=6, texture=True)
     hatches = {p.get_hatch() for p in ax.patches}

@@ -1,8 +1,9 @@
 """Themes: a small bundle of palettes + chrome + typography, plus the global
 theme state and the matplotlib ``rcParams`` application.
 
-Built-in themes: :data:`LIGHT`, :data:`DARK`, and the custom :data:`LIME` /
-:data:`LIME_DARK` ("Lime Green", ported from a shadcn theme). A theme is applied
+Built-in themes: :data:`LIGHT`, :data:`DARK`, the custom :data:`LIME` /
+:data:`LIME_DARK` ("Lime Green"), and :data:`SHADCN` / :data:`SHADCN_DARK` (the
+shadcn chart aesthetic — rounded bar ends, no axis spines). A theme is applied
 globally with :func:`set_theme` or scoped with the :func:`theme` context manager;
 individual chart calls can also override per-call via their ``theme=`` argument.
 """
@@ -11,7 +12,7 @@ from __future__ import annotations
 
 import contextlib
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from types import MappingProxyType
 
 import matplotlib as mpl
@@ -58,6 +59,9 @@ class Theme:
     deemphasis: str
     font_family: tuple[str, ...] = field(default=("sans-serif",))
     type_scale: Mapping[str, int] = field(default_factory=lambda: _TYPE_SCALE)
+    # Chrome/shape style knobs (defaults preserve the classic look).
+    axis_lines: bool = True  # draw the left/bottom hairline spines
+    bar_radius: float = 0.0  # fraction of bar thickness to round the data-end corners
 
     @classmethod
     def from_mode(cls, mode: str) -> "Theme":
@@ -84,12 +88,18 @@ DARK = Theme.from_mode("dark")
 # "Lime Green" — a custom theme ported from a shadcn theme (lime primary).
 LIME = Theme.from_mode("lime")
 LIME_DARK = Theme.from_mode("lime-dark")
+# shadcn chart aesthetic: the validated palette + shadcn chrome — rounded bar ends
+# and no axis spines (faint horizontal grid, muted labels carry the rest).
+SHADCN = replace(LIGHT, name="shadcn", axis_lines=False, bar_radius=0.22)
+SHADCN_DARK = replace(DARK, name="shadcn-dark", axis_lines=False, bar_radius=0.22)
 
 _BUILTIN: dict[str, Theme] = {
     "light": LIGHT,
     "dark": DARK,
     "lime": LIME,
     "lime-dark": LIME_DARK,
+    "shadcn": SHADCN,
+    "shadcn-dark": SHADCN_DARK,
 }
 _active: Theme = LIGHT
 

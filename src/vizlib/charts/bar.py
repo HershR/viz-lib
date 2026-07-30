@@ -231,6 +231,17 @@ def bar(
         ylabel=ylabel,
     )
 
+    # Rounded bar ends (shadcn-style themes). Done last so labels/legend used the
+    # original rectangles. Stacked rounds only the top segment of each stack.
+    if th.bar_radius > 0:
+        core.round_bars(
+            ax,
+            [c for c, _ in drawn],
+            th,
+            horizontal=horizontal,
+            only_top_segment=stacked,
+        )
+
     return ax
 
 

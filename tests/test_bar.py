@@ -185,6 +185,24 @@ def test_subtitle_and_caption_render(sales):
     assert "Source: demo" in texts
 
 
+def test_shadcn_theme_rounds_bars_and_hides_spines(sales):
+    from matplotlib.patches import PathPatch
+
+    ax = viz.bar(sales, x="region", y="revenue", theme="shadcn")
+    # Rounded bars are PathPatches, not plain Rectangles.
+    assert all(isinstance(p, PathPatch) for p in ax.patches)
+    assert ax.spines["left"].get_visible() is False
+    assert ax.spines["bottom"].get_visible() is False
+
+
+def test_default_theme_keeps_square_bars(sales):
+    from matplotlib.patches import Rectangle
+
+    ax = viz.bar(sales, x="region", y="revenue")
+    assert all(isinstance(p, Rectangle) for p in ax.patches)
+    assert ax.spines["left"].get_visible() is True
+
+
 def test_invalid_column_raises(sales):
     with pytest.raises(KeyError):
         viz.bar(sales, x="nope", y="revenue")

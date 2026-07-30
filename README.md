@@ -130,22 +130,26 @@ with viz.theme("dark"):     # scoped override
     viz.bar(sales, x="region", y="revenue")
 ```
 
-Four themes are built in — **light**, **dark**, and the custom **lime** /
-**lime-dark** — each with a validated categorical, sequential, and diverging palette
-plus recessive chrome tokens and a deliberate type scale. See
+Six themes are built in — **light**, **dark**, the custom **lime** / **lime-dark**,
+and **shadcn** / **shadcn-dark** — each with a validated categorical, sequential, and
+diverging palette plus recessive chrome tokens and a deliberate type scale. See
 [`mvp.md`](./mvp.md#5-theming-system) for the palette values.
 
 The **lime** / **lime-dark** theme ("Lime Green", ported from a shadcn theme) puts a
-lime primary/accent over light and dark surfaces:
+lime primary/accent over light and dark surfaces. The **shadcn** / **shadcn-dark**
+theme mimics the shadcn charts aesthetic — **rounded bar ends and no axis spines**,
+over vizlib's validated palette:
 
 ```python
-viz.bar(sales, x="region", y="revenue", theme="lime")        # by name
-with viz.theme("lime-dark"):
+viz.bar(sales, x="region", y="revenue", theme="lime")          # lime accent
+viz.bar(sales, x="region", y="revenue", theme="shadcn")        # rounded, borderless
+with viz.theme("shadcn-dark"):
     viz.line(usage, x="month", y="users", by="plan")
 ```
 
-Build your own by constructing a `Theme` (see `viz.LIME`) or passing `palette=` to
-any chart.
+A `Theme` also exposes two chrome/shape knobs — `axis_lines` (draw the left/bottom
+spines) and `bar_radius` (round bar ends) — so you can build your own look with
+`dataclasses.replace(viz.LIGHT, ...)`, or pass `palette=` to any chart.
 
 ---
 

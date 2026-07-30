@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.patches import PathPatch
+from matplotlib.path import Path
 
 from .themes import Theme
 
@@ -34,8 +36,12 @@ def style_axes(ax: Axes, theme: Theme, *, grid_axis: str | None = "y") -> None:
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color(theme.baseline)
-        ax.spines[side].set_linewidth(1.0)
+        if theme.axis_lines:
+            ax.spines[side].set_visible(True)
+            ax.spines[side].set_color(theme.baseline)
+            ax.spines[side].set_linewidth(1.0)
+        else:
+            ax.spines[side].set_visible(False)
 
     ax.tick_params(
         colors=theme.muted,
@@ -125,6 +131,98 @@ def add_legend(ax: Axes, theme: Theme) -> None:
     )
     if legend is not None:
         legend.set_title(None)
+
+
+def _rounded_bar_path(x0, y0, w, h, r, horizontal):
+    """A rectangle path with its two data-end corners rounded by radius ``r``.
+
+    Vertical bars round the top (away from the y=0 baseline); horizontal bars round
+    the right end. ``r`` is clamped to half the thickness and the bar length.
+    """
+    if horizontal:
+        r = max(0.0, min(r, abs(h) / 2, abs(w)))
+        # Round the right corners.
+        verts = [
+            (x0, y0),
+            (x0 + w - r, y0),
+            (x0 + w, y0),  # control -> bottom-right corner
+            (x0 + w, y0 + r),
+            (x0 + w, y0 + h - r),
+            (x0 + w, y0 + h),  # control -> top-right corner
+            (x0 + w - r, y0 + h),
+            (x0, y0 + h),
+            (x0, y0),
+        ]
+        codes = [
+            Path.MOVETO,
+            Path.LINETO,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.LINETO,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.LINETO,
+            Path.CLOSEPOLY,
+        ]
+    else:
+        r = max(0.0, min(r, abs(w) / 2, abs(h)))
+        # Round the top corners.
+        verts = [
+            (x0, y0),
+            (x0, y0 + h - r),
+            (x0, y0 + h),  # control -> top-left corner
+            (x0 + r, y0 + h),
+            (x0 + w - r, y0 + h),
+            (x0 + w, y0 + h),  # control -> top-right corner
+            (x0 + w, y0 + h - r),
+            (x0 + w, y0),
+            (x0, y0),
+        ]
+        codes = [
+            Path.MOVETO,
+            Path.LINETO,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.LINETO,
+            Path.CURVE3,
+            Path.CURVE3,
+            Path.LINETO,
+            Path.CLOSEPOLY,
+        ]
+    return Path(verts, codes)
+
+
+def round_bars(ax, containers, theme, *, horizontal, only_top_segment=False):
+    """Replace bar rectangles with rounded-data-end path patches (shadcn look).
+
+    ``containers`` is the list of BarContainers drawn for the chart. Each rectangle
+    is swapped for a :class:`PathPatch` with the same style so colors, hatches, and
+    edges survive. ``only_top_segment`` rounds just the last container (stacked-bar
+    tops); otherwise every bar is rounded.
+    """
+    if theme.bar_radius <= 0:
+        return
+    targets = containers[-1:] if only_top_segment else containers
+    for container in targets:
+        # A BarContainer exposes .patches; hist may return a plain patch list.
+        rects = getattr(container, "patches", container)
+        for rect in list(rects):
+            w, h = rect.get_width(), rect.get_height()
+            if w == 0 or h == 0:
+                continue
+            thickness = abs(h) if horizontal else abs(w)
+            r = theme.bar_radius * thickness
+            path = _rounded_bar_path(rect.get_x(), rect.get_y(), w, h, r, horizontal)
+            patch = PathPatch(
+                path,
+                facecolor=rect.get_facecolor(),
+                edgecolor=rect.get_edgecolor(),
+                linewidth=rect.get_linewidth(),
+                hatch=rect.get_hatch(),
+                zorder=rect.get_zorder(),
+            )
+            rect.remove()
+            ax.add_patch(patch)
 
 
 def format_value(v: float) -> str:
