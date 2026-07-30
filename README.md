@@ -11,11 +11,9 @@ mode. `vizlib` doesn't replace matplotlib or add new chart types — it applies
 **good defaults automatically** so the *first* chart you draw is already clear and
 good-looking.
 
-```python
-import vizlib as viz
+Same data, the same one call — matplotlib's defaults (left) vs vizlib (right):
 
-viz.bar(sales, x="region", y="revenue", sort="desc")
-```
+![matplotlib default vs vizlib](./examples/images/before_after.png)
 
 > ✅ **Status: MVP core complete (M1–M4).** The theming engine (`set_theme`, `theme`,
 > `Theme`; light, dark, and the custom `lime` / `lime-dark`), the **Core-4 charts**
@@ -59,6 +57,21 @@ Requires Python 3.10+, matplotlib, and pandas. The package uses a `src/` layout
 ---
 
 ## Quickstart
+
+A complete, runnable example:
+
+```python
+import pandas as pd
+import vizlib as viz
+
+sales = pd.DataFrame(
+    {"region": ["North", "South", "East", "West"], "revenue": [120, 90, 150, 60]}
+)
+ax = viz.bar(sales, x="region", y="revenue", sort="desc", title="Revenue by region")
+ax.figure.savefig("revenue.png", dpi=150, bbox_inches="tight")
+```
+
+More patterns (assuming `sales`, `usage`, `survey`, `latency` DataFrames):
 
 ```python
 import matplotlib.pyplot as plt
@@ -117,12 +130,13 @@ with viz.theme("dark"):     # scoped override
     viz.bar(sales, x="region", y="revenue")
 ```
 
-Two themes ship in v1 (**light** and **dark**), each with a validated categorical,
-sequential, and diverging palette plus recessive chrome tokens. See
+Four themes are built in — **light**, **dark**, and the custom **lime** /
+**lime-dark** — each with a validated categorical, sequential, and diverging palette
+plus recessive chrome tokens and a deliberate type scale. See
 [`mvp.md`](./mvp.md#5-theming-system) for the palette values.
 
-A custom **`lime`** / **`lime-dark`** theme ("Lime Green", ported from a shadcn
-theme) is also built in — a lime primary/accent over light and dark surfaces:
+The **lime** / **lime-dark** theme ("Lime Green", ported from a shadcn theme) puts a
+lime primary/accent over light and dark surfaces:
 
 ```python
 viz.bar(sales, x="region", y="revenue", theme="lime")        # by name
@@ -132,6 +146,19 @@ with viz.theme("lime-dark"):
 
 Build your own by constructing a `Theme` (see `viz.LIME`) or passing `palette=` to
 any chart.
+
+---
+
+## Examples
+
+Runnable scripts covering every chart, emphasis, theming, and black-and-white
+(texture) output live in [`examples/`](./examples), with a rendered gallery in
+[`examples/README.md`](./examples/README.md):
+
+```bash
+python examples/before_after.py     # matplotlib default vs vizlib
+python examples/black_and_white.py  # texture channel, in color and grayscale
+```
 
 ---
 
