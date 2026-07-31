@@ -6,7 +6,7 @@ import pytest
 from matplotlib.axes import Axes
 from matplotlib.colors import to_hex
 
-import vizlib as viz
+import chartcn as viz
 
 
 @pytest.fixture(autouse=True)

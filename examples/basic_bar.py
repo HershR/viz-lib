@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-import vizlib as viz
+import chartcn as viz
 
 IMAGES = Path(__file__).parent / "images"
 

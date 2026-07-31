@@ -1,30 +1,30 @@
-# vizlib
+# chartcn
 
-> **Working name — subject to change.** A **shadcn-inspired** chart library: a thin,
-> opinionated wrapper around [matplotlib](https://matplotlib.org/) that turns a
+> A **shadcn-inspired** chart library: a thin, opinionated wrapper around
+> [matplotlib](https://matplotlib.org/) that turns a
 > [pandas](https://pandas.pydata.org/) DataFrame into a clean, shadcn-style chart in
 > one call — in light **and** dark mode.
 
 matplotlib can draw almost anything, but its defaults look dated: loud colors, heavy
-gridlines, boxed-in axes, no dark mode. `vizlib` doesn't replace matplotlib or add
+gridlines, boxed-in axes, no dark mode. `chartcn` doesn't replace matplotlib or add
 new chart types — it makes the **shadcn charts aesthetic the default**: rounded bar
 ends, borderless axes, a whisper-faint horizontal grid, muted labels on both axes,
 and light/dark card surfaces — all over a **colorblind-safe palette**.
 
-Same data, the same one call — matplotlib's defaults (left) vs vizlib (right):
+Same data, the same one call — matplotlib's defaults (left) vs chartcn (right):
 
-![matplotlib default vs vizlib](./examples/images/before_after.png)
+![matplotlib default vs chartcn](./examples/images/before_after.png)
 
 > ✅ **Default look is shadcn, light + dark.** `viz.bar(df, x=…, y=…)` renders the
 > shadcn style out of the box; `theme="dark"` gives the dark card. The four core
 > charts (`bar`, `line`, `scatter`, `hist`) share emphasis (`highlight=`) and an
-> opt-in texture channel. The original vizlib look is preserved as `classic` /
+> opt-in texture channel. The original chartcn look is preserved as `classic` /
 > `classic-dark`. See [`shadcnStyle.md`](./shadcnStyle.md) for the style breakdown
 > and [`mvp.md`](./mvp.md) for the roadmap.
 
 ---
 
-## Why vizlib
+## Why chartcn
 
 - **shadcn look, zero config.** No theme setup, no color lists, no `despine()`
   boilerplate — the first chart you draw already looks like a shadcn chart.
@@ -51,7 +51,7 @@ pip install -e .
 ```
 
 Requires Python 3.10+, matplotlib, and pandas. The package uses a `src/` layout
-(`src/vizlib/`).
+(`src/chartcn/`).
 
 ---
 
@@ -61,7 +61,7 @@ A complete, runnable example:
 
 ```python
 import pandas as pd
-import vizlib as viz
+import chartcn as viz
 
 sales = pd.DataFrame(
     {"region": ["North", "South", "East", "West"], "revenue": [120, 90, 150, 60]}
@@ -74,7 +74,7 @@ More patterns (assuming `sales`, `usage`, `survey`, `latency` DataFrames):
 
 ```python
 import matplotlib.pyplot as plt
-import vizlib as viz
+import chartcn as viz
 
 # Magnitude — sorted bars, top category labeled automatically
 viz.bar(sales, x="region", y="revenue", sort="desc")
@@ -137,7 +137,7 @@ Built-in themes:
 | Theme | Look |
 |---|---|
 | **`light`** (default) / **`dark`** | The shadcn aesthetic — rounded bars, no spines, faint grid, card surfaces, both axes labeled — over the validated colorblind-safe palette. |
-| **`classic`** / **`classic-dark`** | The original vizlib look: hairline spines, a visible value axis, square bars, the default sans. |
+| **`classic`** / **`classic-dark`** | The original chartcn look: hairline spines, a visible value axis, square bars, the default sans. |
 | **`lime`** / **`lime-dark`** | A custom lime-accent theme (palette not colorblind-validated). |
 
 Each theme carries a categorical/sequential/diverging palette, chrome tokens, and a
@@ -156,7 +156,7 @@ Runnable scripts covering every chart, emphasis, theming, and black-and-white
 [`examples/README.md`](./examples/README.md):
 
 ```bash
-python examples/before_after.py     # matplotlib default vs vizlib
+python examples/before_after.py     # matplotlib default vs chartcn
 python examples/black_and_white.py  # texture channel, in color and grayscale
 ```
 
@@ -175,7 +175,7 @@ Full scope, milestones, and design rationale live in [`mvp.md`](./mvp.md).
 
 ## Scope & non-goals
 
-`vizlib` is a **wrapper, not a renderer** — it never draws anything from scratch.
+`chartcn` is a **wrapper, not a renderer** — it never draws anything from scratch.
 Out of scope for v1: interactivity/tooltips (matplotlib static output only),
 dashboards, geospatial/3D/animation, and non-pandas inputs. It also deliberately
 avoids known-bad patterns — no dual-axis charts, no rainbow sequential ramps, no

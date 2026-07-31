@@ -1,4 +1,4 @@
-"""Validated color palettes and chrome tokens for vizlib.
+"""Validated color palettes and chrome tokens for chartcn.
 
 The categorical palette is eight hues in a **fixed, colorblind-safe order** — the
 order is the safety mechanism (adjacent-pair separation under simulated
@@ -84,7 +84,7 @@ DEEMPHASIS: dict[str, str] = {"light": "#898781", "dark": "#898781"}
 # --- Chrome & ink tokens -------------------------------------------------------
 # The default "light"/"dark" modes wear the shadcn look — pure-white / near-black
 # card surfaces and zinc neutrals (see shadcnStyle.md). The categorical palette above
-# stays vizlib's validated colorblind-safe set.
+# stays chartcn's validated colorblind-safe set.
 SURFACE: dict[str, str] = {"light": "#ffffff", "dark": "#101010"}
 PRIMARY_INK: dict[str, str] = {"light": "#0a0a0a", "dark": "#fafafa"}
 SECONDARY_INK: dict[str, str] = {"light": "#71717a", "dark": "#a1a1aa"}
@@ -101,7 +101,7 @@ FONT_FAMILY: dict[str, tuple[str, ...]] = {
     "dark": _SHADCN_FONT,
 }
 
-# --- "classic" modes: the original vizlib look (validated palette + classic chrome:
+# --- "classic" modes: the original chartcn look (validated palette + classic chrome:
 # hairline spines, a visible value axis, square bars, the default sans). Same
 # categorical/sequential/diverging as light/dark; only the neutrals differ.
 for _m, _base in (("classic", "light"), ("classic-dark", "dark")):

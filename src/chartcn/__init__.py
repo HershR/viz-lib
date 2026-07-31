@@ -1,10 +1,10 @@
-"""vizlib — an opinionated matplotlib wrapper for pandas DataFrames.
+"""chartcn — an opinionated matplotlib wrapper for pandas DataFrames.
 
 Good defaults, applied automatically: colorblind-safe palettes, recessive chrome,
 selective labels, an emphasis mode, and a real dark theme. Every chart returns the
 underlying matplotlib ``Axes`` so you can always drop down to raw matplotlib.
 
-    >>> import vizlib as viz
+    >>> import chartcn as viz
     >>> ax = viz.bar(sales, x="region", y="revenue", sort="desc")
 """
 

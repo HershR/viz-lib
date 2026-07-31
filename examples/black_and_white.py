@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-import vizlib as viz
+import chartcn as viz
 
 IMAGES = Path(__file__).parent / "images"
 

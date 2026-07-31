@@ -3,9 +3,9 @@ theme state and the matplotlib ``rcParams`` application.
 
 The default look is **shadcn** — :data:`LIGHT` / :data:`DARK` carry the shadcn
 aesthetic (rounded bar ends, no axis spines, faint horizontal grid, zinc/card
-neutrals; both axes stay labeled) over vizlib's validated colorblind-safe palette.
+neutrals; both axes stay labeled) over chartcn's validated colorblind-safe palette.
 :data:`CLASSIC` / :data:`CLASSIC_DARK`
-preserve the original vizlib look, and :data:`LIME` / :data:`LIME_DARK` is a custom
+preserve the original chartcn look, and :data:`LIME` / :data:`LIME_DARK` is a custom
 theme. A theme is applied globally with :func:`set_theme` or scoped with the
 :func:`theme` context manager; individual chart calls can also override per-call via
 their ``theme=`` argument.
@@ -88,13 +88,13 @@ class Theme:
 
 
 # The default look is shadcn: rounded bar ends, no axis spines, a faint horizontal
-# grid, zinc/card neutrals, and an Arial-metric sans — over vizlib's validated
+# grid, zinc/card neutrals, and an Arial-metric sans — over chartcn's validated
 # colorblind-safe palette. Both axes stay labeled (ticks + axis title); only the
 # spines are dropped.
 _SHADCN_CHROME = dict(axis_lines=False, bar_radius=0.10)
 LIGHT = replace(Theme.from_mode("light"), **_SHADCN_CHROME)
 DARK = replace(Theme.from_mode("dark"), **_SHADCN_CHROME)
-# "classic" — the original vizlib look (hairline spines, visible value axis, square
+# "classic" — the original chartcn look (hairline spines, visible value axis, square
 # bars, default sans), kept for anyone who wants it.
 CLASSIC = replace(Theme.from_mode("classic"), name="classic")
 CLASSIC_DARK = replace(Theme.from_mode("classic-dark"), name="classic-dark")
@@ -193,5 +193,5 @@ def theme(theme: Theme | str):
         set_theme(previous)
 
 
-# Apply the default so importing vizlib themes matplotlib immediately.
+# Apply the default so importing chartcn themes matplotlib immediately.
 apply_theme(_active)

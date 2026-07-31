@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-import vizlib as viz
+import chartcn as viz
 
 IMAGES = Path(__file__).parent / "images"
 
@@ -29,7 +29,7 @@ ax = viz.bar(
 ax.figure.savefig(IMAGES / "horizontal_bar.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "horizontal_bar.png")
 
-# Omit `y` and vizlib counts rows per category — a frequency chart.
+# Omit `y` and chartcn counts rows per category — a frequency chart.
 survey = pd.DataFrame({"grade": list("AABBBCADBBAACB")})
 ax = viz.bar(survey, x="grade", sort="desc", title="Grade distribution (row counts)")
 ax.figure.savefig(IMAGES / "counts.png", dpi=120, bbox_inches="tight")

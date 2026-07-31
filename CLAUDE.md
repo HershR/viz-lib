@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-`vizlib` is a **shadcn-inspired chart library** — an opinionated wrapper around
+`chartcn` is a **shadcn-inspired chart library** — an opinionated wrapper around
 matplotlib that renders **pandas DataFrames**. It draws nothing from scratch; every
 chart is a matplotlib call, and the value is the *good defaults* on top. The
 **default look is shadcn** (`light`/`dark`): rounded bar ends, no axis spines, a

@@ -1,16 +1,16 @@
-# vizlib examples
+# chartcn examples
 
 Runnable scripts that demonstrate the features implemented so far — the theming
 engine and the Core-4 charts (`viz.bar`, `viz.line`, `viz.scatter`, `viz.hist`).
 Each script builds a chart from a small pandas DataFrame and saves a PNG into
 [`images/`](./images).
 
-## The pitch: matplotlib default vs vizlib
+## The pitch: matplotlib default vs chartcn
 
-Same data, the same one call — vizlib draws nothing matplotlib can't, it just picks
+Same data, the same one call — chartcn draws nothing matplotlib can't, it just picks
 good defaults ([`before_after.py`](./before_after.py)):
 
-![matplotlib default vs vizlib](./images/before_after.png)
+![matplotlib default vs chartcn](./images/before_after.png)
 
 ## Setup
 
@@ -20,7 +20,7 @@ From the repository root, install the library (editable) into your environment:
 pip install -e .
 ```
 
-This pulls in the runtime dependencies (matplotlib, pandas) and puts `vizlib` on
+This pulls in the runtime dependencies (matplotlib, pandas) and puts `chartcn` on
 your import path.
 
 ## Running the examples
@@ -56,7 +56,7 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 
 | Script | Chart | Feature |
 |---|---|---|
-| [`before_after.py`](./before_after.py) | bar, line | Side-by-side: matplotlib defaults vs vizlib on the same data |
+| [`before_after.py`](./before_after.py) | bar, line | Side-by-side: matplotlib defaults vs chartcn on the same data |
 | [`basic_bar.py`](./basic_bar.py) | bar | A single series, sorted, with the top bar auto-labeled |
 | [`grouped_and_stacked.py`](./grouped_and_stacked.py) | bar | Multi-series bars via `by=` — grouped and stacked |
 | [`emphasis.py`](./emphasis.py) | bar | `highlight=` — accent the one bar that matters, gray the rest |

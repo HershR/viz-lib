@@ -1,6 +1,6 @@
-# vizlib — MVP
+# chartcn — MVP
 
-> **Working name:** `vizlib` (placeholder — rename before publishing).
+> **Package:** `chartcn`.
 > A thin, opinionated wrapper around **matplotlib** that turns a **pandas
 > DataFrame** into a publication-ready chart in one call.
 
@@ -14,19 +14,19 @@ collide, and no dark mode. Most people either fight the styling by hand every ti
 or reach for another library. Existing wrappers (seaborn, pandas `.plot`) improve
 ergonomics but still don't make a chart that is *clear* and *looks good* by default.
 
-**Value proposition:** `vizlib` is a **shadcn-inspired** chart library. It does not
+**Value proposition:** `chartcn` is a **shadcn-inspired** chart library. It does not
 add new plot types or a new rendering engine; it makes the **shadcn charts aesthetic
 the default** (rounded bar ends, borderless axes, faint grid, both axes labeled,
 light/dark card surfaces) on top of matplotlib — over a colorblind-safe palette, with
 selective labels and an emphasis-first mindset — so the *first* chart you draw already
-looks like a shadcn chart. (The original vizlib look remains as the `classic` theme.)
+looks like a shadcn chart. (The original chartcn look remains as the `classic` theme.)
 
 **Hard constraint:** this is a **wrapper, never a from-scratch renderer.** Every
-chart is produced by calling matplotlib; `vizlib` only chooses inputs and
+chart is produced by calling matplotlib; `chartcn` only chooses inputs and
 post-styles the result. Every function returns the underlying matplotlib object so
 users can always drop down to raw matplotlib.
 
-**One-line pitch:** _`vizlib.bar(df, x="region", y="sales")` → a chart you'd put in
+**One-line pitch:** _`chartcn.bar(df, x="region", y="sales")` → a chart you'd put in
 a report, with zero styling arguments._
 
 ---
@@ -39,7 +39,7 @@ v1 — they are the product.
 1. **Form before color.** The data's job (magnitude / trend / identity / polarity /
    one headline) picks the chart type. Color is assigned last, by the job it does.
 2. **Sequential is the safe default; emphasis is the honest one.** When the story is
-   "this one series is the point," `vizlib` highlights it and grays the rest
+   "this one series is the point," `chartcn` highlights it and grays the rest
    (`highlight=`) instead of handing every series a loud color.
 3. **Colorblind-safe categorical palette, fixed order, never cycled.** Eight hues in
    a validated order (§5). A 9th series is folded into "Other" — the library will
@@ -84,7 +84,7 @@ Each chart type is a **top-level function** taking a DataFrame plus column names
 returning the matplotlib `Axes` it drew on:
 
 ```python
-import vizlib as viz
+import chartcn as viz
 
 ax = viz.bar(df, x="region", y="sales")
 ax = viz.line(df, x="month", y="revenue", by="product")
@@ -149,7 +149,7 @@ Notes:
 
 ```python
 import matplotlib.pyplot as plt
-import vizlib as viz
+import chartcn as viz
 
 # Magnitude, sorted, top category labeled automatically
 viz.bar(sales, x="region", y="revenue", sort="desc")
@@ -193,7 +193,7 @@ A `Theme` is a small dataclass bundling palettes + chrome + typography + shape k
 `rcParams` and is what each chart function reads before drawing. The **default look is
 shadcn**: **light** / **dark** carry the shadcn aesthetic (rounded bar ends, no axis
 spines, faint grid, both axes labeled, card surfaces, Arial-metric sans) over the
-validated colorblind-safe palette. **classic** / **classic-dark** preserve the original vizlib
+validated colorblind-safe palette. **classic** / **classic-dark** preserve the original chartcn
 look; **lime** / **lime-dark** is a custom theme.
 
 ### 5.2 Palettes (validated default)
@@ -251,7 +251,7 @@ dark surface, not a different palette.
 Small, flat package — each piece does one thing.
 
 ```
-vizlib/
+chartcn/
   __init__.py      # re-exports bar, line, scatter, hist, set_theme, theme, Theme
   core.py          # apply_theme(), _resolve_theme(), _despine(), _direct_labels(),
                    # _finalize(ax, ...)  — shared post-styling helpers
@@ -288,12 +288,12 @@ draw into the caller's `ax` and leave figure-level styling to them.
 - **Python:** 3.10+.
 - **Build:** `pyproject.toml` (PEP 621), setuptools or hatchling backend.
 - **Dev:** `pytest` + `pytest-mpl` (image-comparison tests), `ruff`, `black`.
-- **Install:** `pip install vizlib` (name is a placeholder).
+- **Install:** `pip install chartcn`.
 
 ```toml
 # pyproject.toml (sketch)
 [project]
-name = "vizlib"
+name = "chartcn"
 requires-python = ">=3.10"
 dependencies = ["matplotlib>=3.7", "pandas>=2.0"]
 ```
@@ -307,7 +307,7 @@ dependencies = ["matplotlib>=3.7", "pandas>=2.0"]
 | **M1** | Theming engine + `bar` | `set_theme`, `Theme`, light/dark palettes exist; `viz.bar` draws a themed grouped/stacked/horizontal bar and returns an `Axes`. |
 | **M2** | Remaining Core 4 | `line`, `scatter`, `hist` implemented on the shared contract; all four honor the shared keyword vocabulary. |
 | **M3** | Shared emphasis | `highlight=` accents the selected series/group and grays the rest (dropping the legend) on **all four** charts via a shared path; `label="auto"` selective labels on bar & line. Direct labels stay bar/line-only (a value per point/bin is the anti-pattern). |
-| **M4** | Polish, docs, gallery | README, an examples gallery (side-by-side "matplotlib default vs vizlib"), image-comparison tests, `pyproject.toml` packaged & pip-installable. |
+| **M4** | Polish, docs, gallery | README, an examples gallery (side-by-side "matplotlib default vs chartcn"), image-comparison tests, `pyproject.toml` packaged & pip-installable. |
 
 ---
 
@@ -326,7 +326,7 @@ dependencies = ["matplotlib>=3.7", "pandas>=2.0"]
 
 ## 10. Non-goals & anti-patterns the library refuses to make easy
 
-`vizlib` will **not** provide a comfortable path to these known-bad outputs:
+`chartcn` will **not** provide a comfortable path to these known-bad outputs:
 
 - **Dual-axis charts** (two y-scales) — no API for a secondary y-axis.
 - **Rainbow / multi-hue sequential** ramps for magnitude — sequential is one hue.

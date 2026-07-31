@@ -48,7 +48,7 @@ def line(
 ) -> Axes:
     """Draw a themed line chart from ``df`` and return the matplotlib ``Axes``.
 
-    Parameters mirror :func:`vizlib.bar`. ``y=None`` counts rows per ``x``; duplicate
+    Parameters mirror :func:`chartcn.bar`. ``y=None`` counts rows per ``x``; duplicate
     ``(x, series)`` values are averaged. ``highlight`` (matched against ``by`` series)
     accents the selected line(s) and grays the rest.
 
