@@ -58,8 +58,8 @@ import chartcn as viz
 penguin = replace(
     viz.LIGHT,
     name="penguin",
-    categorical=("#f97316", "#1f2937", "#facc15", "#f59e0b",
-                 "#b45309", "#fdba74", "#78716c", "#fde68a"),
+    categorical=("#f97316", "#1f2937", "#2563eb", "#eab308",
+                 "#0d9488", "#e11d48", "#9333ea", "#78716c"),
     emphasis="#ea580c",
     deemphasis="#d6d3d1",
     gridline="#efeae3",
