@@ -49,25 +49,26 @@ def test_theme_is_immutable():
         viz.LIGHT.surface = "#000000"
 
 
-def test_shadcn_themes_resolve_with_shadcn_palette():
-    from vizlib.themes import resolve_theme
-
-    assert resolve_theme("shadcn") is viz.SHADCN
-    assert resolve_theme("shadcn-dark") is viz.SHADCN_DARK
-    # shadcn uses its own chart palette (coral lead in light), not the blue default.
-    assert viz.SHADCN.categorical[0] == "#e76e50"
-    assert viz.SHADCN.categorical != viz.LIGHT.categorical
-
-
-def test_shadcn_style_knobs():
-    for th in (viz.SHADCN, viz.SHADCN_DARK):
+def test_default_light_dark_are_shadcn_styled():
+    # The default look is shadcn: rounded bars, no spines, hidden value axis.
+    for th in (viz.LIGHT, viz.DARK):
         assert th.axis_lines is False
         assert th.bar_radius > 0
         assert th.value_axis is False
-    # Classic themes keep the default chrome and value axis.
-    assert viz.LIGHT.axis_lines is True
-    assert viz.LIGHT.bar_radius == 0.0
-    assert viz.LIGHT.value_axis is True
+    # ...over vizlib's validated CVD-safe palette (blue lead), not coral/teal.
+    assert viz.LIGHT.categorical[0] == "#2a78d6"
+    assert viz.LIGHT.categorical == viz.CLASSIC.categorical
+
+
+def test_classic_themes_keep_the_original_chrome():
+    from vizlib.themes import resolve_theme
+
+    assert resolve_theme("classic") is viz.CLASSIC
+    assert resolve_theme("classic-dark") is viz.CLASSIC_DARK
+    for th in (viz.CLASSIC, viz.CLASSIC_DARK):
+        assert th.axis_lines is True
+        assert th.bar_radius == 0.0
+        assert th.value_axis is True
 
 
 def test_theme_type_scale_is_hierarchical():

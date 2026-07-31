@@ -38,7 +38,7 @@ python examples/scatter_relationships.py
 python examples/distributions.py
 python examples/theming.py
 python examples/theme_lime.py
-python examples/theme_shadcn.py
+python examples/light_and_dark.py
 python examples/black_and_white.py
 ```
 
@@ -66,7 +66,7 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 | [`distributions.py`](./distributions.py) | hist | A single distribution, overlaid groups on shared bins, emphasis via `highlight=` |
 | [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
 | [`theme_lime.py`](./theme_lime.py) | any | The built-in "Lime Green" theme (`lime` / `lime-dark`) |
-| [`theme_shadcn.py`](./theme_shadcn.py) | any | The shadcn aesthetic (`shadcn` / `shadcn-dark`) — shadcn palette, rounded bars, no spines/y-axis |
+| [`light_and_dark.py`](./light_and_dark.py) | any | The default shadcn look in light and dark mode |
 | [`black_and_white.py`](./black_and_white.py) | bar, line | `texture=` secondary encoding, shown in color and desaturated to grayscale |
 
 ## Gallery
@@ -150,11 +150,10 @@ distinct set. Light (`lime`) and dark (`lime-dark`) variants.
 ![lime dark line](./images/lime_dark_line.png)
 ![lime dark scatter](./images/lime_dark_scatter.png)
 
-### `theme_shadcn.py`
-The **shadcn** / **shadcn-dark** theme mimics the shadcn charts look — shadcn's own
-chart palette (coral/teal light, blue/green dark), rounded bar ends, no axis spines,
-a hidden value axis with a faint horizontal grid, and small muted labels.
+### `light_and_dark.py`
+The default look **is** shadcn — rounded bar ends, no axis spines, a hidden value
+axis with a faint horizontal grid, muted labels — over the validated colorblind-safe
+palette. It ships in light and dark mode (`theme="dark"`).
 
-![shadcn bar](./images/shadcn_bar.png)
-![shadcn grouped](./images/shadcn_grouped.png)
-![shadcn dark line](./images/shadcn_dark_line.png)
+![light mode](./images/light_mode.png)
+![dark mode](./images/dark_mode.png)

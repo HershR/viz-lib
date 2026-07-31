@@ -4,11 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-`vizlib` is an **opinionated wrapper around matplotlib** that renders **pandas
-DataFrames**. It draws nothing from scratch — every chart is produced by a
-matplotlib call; the library's value is the *good defaults* it applies on top.
-Read `mvp.md` for the full design spec and roadmap; `README.md` for the user-facing
-pitch and current status.
+`vizlib` is a **shadcn-inspired chart library** — an opinionated wrapper around
+matplotlib that renders **pandas DataFrames**. It draws nothing from scratch; every
+chart is a matplotlib call, and the value is the *good defaults* on top. The
+**default look is shadcn** (`light`/`dark`): rounded bar ends, no axis spines, a
+hidden value axis with a faint horizontal grid, card surfaces, an Arial-metric sans
+— over a colorblind-safe palette. The original look is preserved as
+`classic`/`classic-dark`. Read `shadcnStyle.md` for the style breakdown, `mvp.md` for
+the design spec/roadmap, and `README.md` for the user-facing pitch.
 
 ## Commands
 
@@ -62,15 +65,15 @@ the same five-step pipeline, and new chart types must too:
 
 - `palettes.py` — pure color data (no logic), keyed by mode `"light"`/`"dark"`:
   the 8-hue categorical order, sequential/diverging ramps, and chrome/ink tokens.
-- `themes.py` — the immutable `Theme` dataclass assembled from `palettes`; the
-  built-in themes `LIGHT`/`DARK`, `LIME`/`LIME_DARK`, and `SHADCN`/`SHADCN_DARK`
-  (shadcn look = shadcn's own chart palette + chrome knobs `axis_lines=False`,
-  `bar_radius>0`, `value_axis=False`, on `from_mode("shadcn")` via
-  `dataclasses.replace`); global theme state (`set_theme`/`get_theme`/`theme`
-  context manager) and `apply_theme` (rcParams). `Theme` carries chrome/shape knobs
-  — `axis_lines` (left/bottom spines), `bar_radius` (rounded bar ends), and
-  `value_axis` (show value-axis ticks) — that `core.style_axes`/`core.round_bars`
-  honor.
+- `themes.py` — the immutable `Theme` dataclass assembled from `palettes`. The
+  default `LIGHT`/`DARK` wear the **shadcn** chrome (knobs `axis_lines=False`,
+  `bar_radius=0.10`, `value_axis=False`, zinc/card neutrals, Liberation Sans) over
+  the validated CVD palette, built via `dataclasses.replace(from_mode(...), ...)`.
+  `CLASSIC`/`CLASSIC_DARK` are the original look (classic-chrome defaults);
+  `LIME`/`LIME_DARK` is a custom theme. Also: global theme state
+  (`set_theme`/`get_theme`/`theme`) and `apply_theme` (rcParams). `Theme` carries
+  chrome/shape knobs — `axis_lines` (spines), `bar_radius` (rounded bar ends),
+  `value_axis` (value-axis ticks) — that `core.style_axes`/`core.round_bars` honor.
 - `core.py` — theme-agnostic post-styling helpers shared by all charts.
 - `charts/_common.py` — data-shaping and color logic shared across charts:
   `aggregate_matrix`/`fold_matrix` (bar, line), `split_groups`/`fold_groups`

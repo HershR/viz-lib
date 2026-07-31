@@ -1,11 +1,13 @@
 """Themes: a small bundle of palettes + chrome + typography, plus the global
 theme state and the matplotlib ``rcParams`` application.
 
-Built-in themes: :data:`LIGHT`, :data:`DARK`, the custom :data:`LIME` /
-:data:`LIME_DARK` ("Lime Green"), and :data:`SHADCN` / :data:`SHADCN_DARK` (the
-shadcn chart aesthetic — rounded bar ends, no axis spines). A theme is applied
-globally with :func:`set_theme` or scoped with the :func:`theme` context manager;
-individual chart calls can also override per-call via their ``theme=`` argument.
+The default look is **shadcn** — :data:`LIGHT` / :data:`DARK` carry the shadcn
+aesthetic (rounded bar ends, no axis spines, hidden value axis, zinc/card neutrals)
+over vizlib's validated colorblind-safe palette. :data:`CLASSIC` / :data:`CLASSIC_DARK`
+preserve the original vizlib look, and :data:`LIME` / :data:`LIME_DARK` is a custom
+theme. A theme is applied globally with :func:`set_theme` or scoped with the
+:func:`theme` context manager; individual chart calls can also override per-call via
+their ``theme=`` argument.
 """
 
 from __future__ import annotations
@@ -84,34 +86,27 @@ class Theme:
         )
 
 
-LIGHT = Theme.from_mode("light")
-DARK = Theme.from_mode("dark")
+# The default look is shadcn: rounded bar ends, no axis spines, a hidden value axis
+# (a faint horizontal grid carries it), zinc/card neutrals, and an Arial-metric sans
+# — over vizlib's validated colorblind-safe palette.
+_SHADCN_CHROME = dict(axis_lines=False, bar_radius=0.10, value_axis=False)
+LIGHT = replace(Theme.from_mode("light"), **_SHADCN_CHROME)
+DARK = replace(Theme.from_mode("dark"), **_SHADCN_CHROME)
+# "classic" — the original vizlib look (hairline spines, visible value axis, square
+# bars, default sans), kept for anyone who wants it.
+CLASSIC = replace(Theme.from_mode("classic"), name="classic")
+CLASSIC_DARK = replace(Theme.from_mode("classic-dark"), name="classic-dark")
 # "Lime Green" — a custom theme ported from a shadcn theme (lime primary).
 LIME = Theme.from_mode("lime")
 LIME_DARK = Theme.from_mode("lime-dark")
-# shadcn chart aesthetic: shadcn's own chart palette + zinc neutrals + Arial-metric
-# sans, with shadcn chrome — rounded bar ends, no axis spines, and a hidden value
-# axis (a faint horizontal grid carries it).
-SHADCN = replace(
-    Theme.from_mode("shadcn"),
-    axis_lines=False,
-    bar_radius=0.10,  # subtle rounding (~4-6px), matching the references
-    value_axis=False,
-)
-SHADCN_DARK = replace(
-    Theme.from_mode("shadcn-dark"),
-    axis_lines=False,
-    bar_radius=0.10,
-    value_axis=False,
-)
 
 _BUILTIN: dict[str, Theme] = {
     "light": LIGHT,
     "dark": DARK,
+    "classic": CLASSIC,
+    "classic-dark": CLASSIC_DARK,
     "lime": LIME,
     "lime-dark": LIME_DARK,
-    "shadcn": SHADCN,
-    "shadcn-dark": SHADCN_DARK,
 }
 _active: Theme = LIGHT
 

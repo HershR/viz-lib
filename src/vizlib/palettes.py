@@ -82,15 +82,47 @@ EMPHASIS: dict[str, str] = {"light": "#2a78d6", "dark": "#3987e5"}
 DEEMPHASIS: dict[str, str] = {"light": "#898781", "dark": "#898781"}
 
 # --- Chrome & ink tokens -------------------------------------------------------
-SURFACE: dict[str, str] = {"light": "#fcfcfb", "dark": "#1a1a19"}
-PRIMARY_INK: dict[str, str] = {"light": "#0b0b0b", "dark": "#ffffff"}
-SECONDARY_INK: dict[str, str] = {"light": "#52514e", "dark": "#c3c2b7"}
-MUTED: dict[str, str] = {"light": "#898781", "dark": "#898781"}
-GRIDLINE: dict[str, str] = {"light": "#e1e0d9", "dark": "#2c2c2a"}
-BASELINE: dict[str, str] = {"light": "#c3c2b7", "dark": "#383835"}
+# The default "light"/"dark" modes wear the shadcn look — pure-white / near-black
+# card surfaces and zinc neutrals (see shadcnStyle.md). The categorical palette above
+# stays vizlib's validated colorblind-safe set.
+SURFACE: dict[str, str] = {"light": "#ffffff", "dark": "#101010"}
+PRIMARY_INK: dict[str, str] = {"light": "#0a0a0a", "dark": "#fafafa"}
+SECONDARY_INK: dict[str, str] = {"light": "#71717a", "dark": "#a1a1aa"}
+MUTED: dict[str, str] = {"light": "#a1a1aa", "dark": "#71717a"}
+GRIDLINE: dict[str, str] = {"light": "#e4e4e7", "dark": "#181818"}
+BASELINE: dict[str, str] = {"light": "#e4e4e7", "dark": "#181818"}
 
 # Optional per-mode typeface override; modes not listed fall back to sans-serif.
-FONT_FAMILY: dict[str, tuple[str, ...]] = {}
+# shadcn uses Inter/Geist; Liberation Sans is the installed Arial-metric match.
+# (No "Arial" in the list — it isn't installed here and spams findfont warnings.)
+_SHADCN_FONT = ("Liberation Sans", "DejaVu Sans", "sans-serif")
+FONT_FAMILY: dict[str, tuple[str, ...]] = {
+    "light": _SHADCN_FONT,
+    "dark": _SHADCN_FONT,
+}
+
+# --- "classic" modes: the original vizlib look (validated palette + classic chrome:
+# hairline spines, a visible value axis, square bars, the default sans). Same
+# categorical/sequential/diverging as light/dark; only the neutrals differ.
+for _m, _base in (("classic", "light"), ("classic-dark", "dark")):
+    CATEGORICAL[_m] = CATEGORICAL[_base]
+    SEQUENTIAL[_m] = SEQUENTIAL[_base]
+    DIVERGING[_m] = DIVERGING[_base]
+    EMPHASIS[_m] = EMPHASIS[_base]
+DEEMPHASIS["classic"] = "#898781"
+DEEMPHASIS["classic-dark"] = "#898781"
+SURFACE["classic"] = "#fcfcfb"
+SURFACE["classic-dark"] = "#1a1a19"
+PRIMARY_INK["classic"] = "#0b0b0b"
+PRIMARY_INK["classic-dark"] = "#ffffff"
+SECONDARY_INK["classic"] = "#52514e"
+SECONDARY_INK["classic-dark"] = "#c3c2b7"
+MUTED["classic"] = "#898781"
+MUTED["classic-dark"] = "#898781"
+GRIDLINE["classic"] = "#e1e0d9"
+GRIDLINE["classic-dark"] = "#2c2c2a"
+BASELINE["classic"] = "#c3c2b7"
+BASELINE["classic-dark"] = "#383835"
 
 # --- "Lime Green" custom theme (ported from a shadcn theme) --------------------
 # Signature: the lime `#aff33e` primary drives the accent/emphasis and the leading
@@ -163,58 +195,3 @@ MUTED["lime-dark"] = "#64748b"
 GRIDLINE["lime-dark"] = "#1e293b"
 BASELINE["lime-dark"] = "#334155"
 FONT_FAMILY["lime-dark"] = ("Inter", "system-ui", "sans-serif")
-
-# --- "shadcn" theme: shadcn's chart palette + zinc neutrals -------------------
-# Uses shadcn's actual --chart-1..5 colors (light: coral/teal/slate/gold/orange;
-# dark: blue/green/orange/violet/pink), extended to the fixed 8. Not CVD-validated
-# (documented, like lime). Paired with shadcn chrome via the theme's style knobs
-# (rounded bars, no spines, hidden value axis) and an Arial-metric sans.
-_SHADCN_FONT = ("Liberation Sans", "Arial", "DejaVu Sans", "sans-serif")
-
-# Light
-CATEGORICAL["shadcn"] = (
-    "#e76e50",  # 1 coral   (chart-1)
-    "#2a9d8f",  # 2 teal    (chart-2)
-    "#274754",  # 3 slate   (chart-3)
-    "#e8c468",  # 4 gold    (chart-4)
-    "#f4a261",  # 5 orange  (chart-5)
-    "#5b8ff9",  # 6 blue
-    "#9270ca",  # 7 violet
-    "#e23670",  # 8 pink
-)
-SEQUENTIAL["shadcn"] = SEQUENTIAL["light"]
-DIVERGING["shadcn"] = ("#e76e50", "#f1f0ea", "#2a9d8f")
-EMPHASIS["shadcn"] = "#e76e50"
-DEEMPHASIS["shadcn"] = "#a1a1aa"
-SURFACE["shadcn"] = "#ffffff"
-PRIMARY_INK["shadcn"] = "#0a0a0a"
-SECONDARY_INK["shadcn"] = "#71717a"
-MUTED["shadcn"] = "#a1a1aa"
-GRIDLINE["shadcn"] = "#e4e4e7"
-BASELINE["shadcn"] = "#e4e4e7"
-FONT_FAMILY["shadcn"] = _SHADCN_FONT
-
-# Dark
-CATEGORICAL["shadcn-dark"] = (
-    "#2662d9",  # 1 blue    (chart-1)
-    "#2eb88a",  # 2 green   (chart-2)
-    "#e88c30",  # 3 orange  (chart-3)
-    "#af57db",  # 4 violet  (chart-4)
-    "#e23670",  # 5 pink    (chart-5)
-    "#2a9d8f",  # 6 teal
-    "#e8c468",  # 7 gold
-    "#94a3b8",  # 8 slate
-)
-SEQUENTIAL["shadcn-dark"] = SEQUENTIAL["dark"]
-DIVERGING["shadcn-dark"] = ("#e23670", "#27272a", "#2eb88a")
-EMPHASIS["shadcn-dark"] = "#2662d9"
-DEEMPHASIS["shadcn-dark"] = "#52525b"
-# Neutrals sampled from the reference cards (see shadcnStyle.md): card #101010 on a
-# #080808 page, with a whisper-faint #181818 grid.
-SURFACE["shadcn-dark"] = "#101010"
-PRIMARY_INK["shadcn-dark"] = "#fafafa"
-SECONDARY_INK["shadcn-dark"] = "#a1a1aa"
-MUTED["shadcn-dark"] = "#71717a"
-GRIDLINE["shadcn-dark"] = "#181818"
-BASELINE["shadcn-dark"] = "#181818"
-FONT_FAMILY["shadcn-dark"] = _SHADCN_FONT
