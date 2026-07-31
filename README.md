@@ -1,43 +1,42 @@
 # vizlib
 
-> **Working name — subject to change.** A thin, opinionated wrapper around
-> [matplotlib](https://matplotlib.org/) that turns a
-> [pandas](https://pandas.pydata.org/) DataFrame into a publication-ready chart in
-> one call.
+> **Working name — subject to change.** A **shadcn-inspired** chart library: a thin,
+> opinionated wrapper around [matplotlib](https://matplotlib.org/) that turns a
+> [pandas](https://pandas.pydata.org/) DataFrame into a clean, shadcn-style chart in
+> one call — in light **and** dark mode.
 
-matplotlib can draw almost anything, but its defaults look bad: loud saturated
-colors in a colorblind-unsafe order, heavy gridlines, boxed-in axes, and no dark
-mode. `vizlib` doesn't replace matplotlib or add new chart types — it applies
-**good defaults automatically** so the *first* chart you draw is already clear and
-good-looking.
+matplotlib can draw almost anything, but its defaults look dated: loud colors, heavy
+gridlines, boxed-in axes, no dark mode. `vizlib` doesn't replace matplotlib or add
+new chart types — it makes the **shadcn charts aesthetic the default**: rounded bar
+ends, borderless axes, a whisper-faint horizontal grid, muted labels on both axes,
+and light/dark card surfaces — all over a **colorblind-safe palette**.
 
 Same data, the same one call — matplotlib's defaults (left) vs vizlib (right):
 
 ![matplotlib default vs vizlib](./examples/images/before_after.png)
 
-> ✅ **Status: MVP core complete (M1–M4).** The theming engine (`set_theme`, `theme`,
-> `Theme`; light, dark, and the custom `lime` / `lime-dark`), the **Core-4 charts**
-> — `bar`, `line`, `scatter`, `hist` — shared **emphasis** (`highlight=`) across all
-> four, a portable render-matrix test suite, and a buildable/typed package. See
-> [`mvp.md`](./mvp.md) for the roadmap and what's next (the `.viz` accessor and more
-> chart types).
+> ✅ **Default look is shadcn, light + dark.** `viz.bar(df, x=…, y=…)` renders the
+> shadcn style out of the box; `theme="dark"` gives the dark card. The four core
+> charts (`bar`, `line`, `scatter`, `hist`) share emphasis (`highlight=`) and an
+> opt-in texture channel. The original vizlib look is preserved as `classic` /
+> `classic-dark`. See [`shadcnStyle.md`](./shadcnStyle.md) for the style breakdown
+> and [`mvp.md`](./mvp.md) for the roadmap.
 
 ---
 
 ## Why vizlib
 
-- **Good defaults, zero config.** No theme setup, no color lists, no `despine()`
-  boilerplate. One call from a DataFrame gives you a chart you'd put in a report.
-- **Colorblind-safe by design.** An eight-hue categorical palette in a fixed,
-  validated order (checked against simulated protanopia/deuteranopia) — never a
-  random color cycle.
-- **Clarity over decoration.** Recessive hairline chrome, thin marks, selective
-  labels, and an *emphasis* mode that highlights the one series that matters and
-  grays the rest.
-- **Real dark mode.** A dark theme with its own validated steps — not an automatic
-  color inversion.
+- **shadcn look, zero config.** No theme setup, no color lists, no `despine()`
+  boilerplate — the first chart you draw already looks like a shadcn chart.
+- **Light and dark, first-class.** `theme="dark"` (or `set_theme("dark")`) switches
+  to the dark card; both are hand-tuned, not an auto-inversion.
+- **Colorblind-safe palette.** Under the shadcn chrome sits an eight-hue categorical
+  palette in a fixed, validated order (checked against simulated protanopia/
+  deuteranopia) — never a random color cycle.
+- **Clarity over decoration.** Recessive chrome, thin marks, selective labels, and an
+  *emphasis* mode (`highlight=`) that spotlights the one series that matters.
 - **Never a dead end.** Every function returns the underlying matplotlib `Axes`, so
-  you can always drop down to raw matplotlib for anything vizlib doesn't cover.
+  you can always drop down to raw matplotlib. Prefer the old look? `theme="classic"`.
 
 ---
 
@@ -125,27 +124,28 @@ See [`mvp.md`](./mvp.md#4-public-api) for full signatures.
 ## Theming
 
 ```python
-viz.set_theme("light")      # or "dark" — the global default
-with viz.theme("dark"):     # scoped override
+# light is the default; switch to the dark card:
+with viz.theme("dark"):
     viz.bar(sales, x="region", y="revenue")
+
+viz.set_theme("dark")                                  # or set it globally
+viz.bar(sales, x="region", y="revenue", theme="classic")  # or per-call override
 ```
 
-Four themes are built in — **light**, **dark**, and the custom **lime** /
-**lime-dark** — each with a validated categorical, sequential, and diverging palette
-plus recessive chrome tokens and a deliberate type scale. See
-[`mvp.md`](./mvp.md#5-theming-system) for the palette values.
+Built-in themes:
 
-The **lime** / **lime-dark** theme ("Lime Green", ported from a shadcn theme) puts a
-lime primary/accent over light and dark surfaces:
+| Theme | Look |
+|---|---|
+| **`light`** (default) / **`dark`** | The shadcn aesthetic — rounded bars, no spines, faint grid, card surfaces, both axes labeled — over the validated colorblind-safe palette. |
+| **`classic`** / **`classic-dark`** | The original vizlib look: hairline spines, a visible value axis, square bars, the default sans. |
+| **`lime`** / **`lime-dark`** | A custom lime-accent theme (palette not colorblind-validated). |
 
-```python
-viz.bar(sales, x="region", y="revenue", theme="lime")        # by name
-with viz.theme("lime-dark"):
-    viz.line(usage, x="month", y="users", by="plan")
-```
-
-Build your own by constructing a `Theme` (see `viz.LIME`) or passing `palette=` to
-any chart.
+Each theme carries a categorical/sequential/diverging palette, chrome tokens, and a
+type scale. A `Theme` also exposes chrome/shape knobs — `axis_lines` (draw the
+left/bottom spines), `bar_radius` (round bar ends), and `value_axis` (show the
+value-axis ticks) — so you can build your own look with
+`dataclasses.replace(viz.LIGHT, ...)`, or pass `palette=` to any chart. See
+[`shadcnStyle.md`](./shadcnStyle.md) for the shadcn style breakdown.
 
 ---
 

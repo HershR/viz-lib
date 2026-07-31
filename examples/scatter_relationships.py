@@ -24,19 +24,35 @@ countries = pd.DataFrame(
 )
 
 # Colored by a categorical column (fixed palette, one hue per group).
-ax = viz.scatter(countries, x="income", y="life_expectancy", by="continent",
-                 title="Life expectancy vs income")
+ax = viz.scatter(
+    countries,
+    x="income",
+    y="life_expectancy",
+    by="continent",
+    title="Life expectancy vs income",
+)
 ax.figure.savefig(IMAGES / "scatter_groups.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "scatter_groups.png")
 
 # A third dimension via size= (mapped to marker area, with a visibility floor).
-ax = viz.scatter(countries, x="income", y="life_expectancy", size="population",
-                 title="...sized by population")
+ax = viz.scatter(
+    countries,
+    x="income",
+    y="life_expectancy",
+    size="population",
+    title="...sized by population",
+)
 ax.figure.savefig(IMAGES / "scatter_sized.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "scatter_sized.png")
 
 # Emphasis: highlight one group; the rest fade to gray and the legend is dropped.
-ax = viz.scatter(countries, x="income", y="life_expectancy", by="continent",
-                 highlight="Europe", title="Europe, in context")
+ax = viz.scatter(
+    countries,
+    x="income",
+    y="life_expectancy",
+    by="continent",
+    highlight="Europe",
+    title="Europe, in context",
+)
 ax.figure.savefig(IMAGES / "scatter_emphasis.png", dpi=120, bbox_inches="tight")
 print("wrote", IMAGES / "scatter_emphasis.png")

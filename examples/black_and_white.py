@@ -37,10 +37,26 @@ usage = pd.DataFrame(
 )
 
 fig, axes = plt.subplots(1, 2, figsize=(14, 5.2))
-viz.bar(survey, x="quarter", y="responses", by="channel", texture=True,
-        ax=axes[0], title="Responses by channel", subtitle="texture=True")
-viz.line(usage, x="month", y="users", by="plan", texture=True,
-         ax=axes[1], title="Users by plan", subtitle="texture=True")
+viz.bar(
+    survey,
+    x="quarter",
+    y="responses",
+    by="channel",
+    texture=True,
+    ax=axes[0],
+    title="Responses by channel",
+    subtitle="texture=True",
+)
+viz.line(
+    usage,
+    x="month",
+    y="users",
+    by="plan",
+    texture=True,
+    ax=axes[1],
+    title="Users by plan",
+    subtitle="texture=True",
+)
 fig.patch.set_facecolor("#fcfcfb")
 fig.tight_layout(pad=2.5)
 color = IMAGES / "black_and_white_color.png"

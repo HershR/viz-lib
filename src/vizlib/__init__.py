@@ -12,6 +12,8 @@ from __future__ import annotations
 
 from .charts import bar, hist, line, scatter
 from .themes import (
+    CLASSIC,
+    CLASSIC_DARK,
     DARK,
     LIGHT,
     LIME,
@@ -32,6 +34,8 @@ __all__ = [
     "Theme",
     "LIGHT",
     "DARK",
+    "CLASSIC",
+    "CLASSIC_DARK",
     "LIME",
     "LIME_DARK",
     "set_theme",

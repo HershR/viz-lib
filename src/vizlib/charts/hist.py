@@ -80,6 +80,7 @@ def hist(
     multi = by is not None and len(groups) > 1
     textured = texture and multi and not emphasis_mode
     ax = core.new_axes(th, ax)
+    containers = []
     for i, ((name, sub), color) in enumerate(zip(groups, colors)):
         values = sub[x].to_numpy(dtype=float)
         values = values[~np.isnan(values)]
@@ -87,7 +88,7 @@ def hist(
             alpha = 0.85 if name in highlight_set else 0.3
         else:
             alpha = 0.6 if multi else 1.0
-        ax.hist(
+        _n, _bins, patches = ax.hist(
             values,
             bins=edges,
             color=color,
@@ -98,11 +99,15 @@ def hist(
             label=(str(name) if name is not None else None),
             **kwargs,
         )
+        containers.append(patches)
 
     # 5. Post-style.
-    core.style_axes(ax, th, grid_axis="y")
+    core.style_axes(ax, th, grid_axis="y", value_axis="y")
     if multi and not emphasis_mode:
         core.add_legend(ax, th)
+    final_ylabel = ylabel if ylabel is not None else "count"
+    if not th.value_axis:
+        final_ylabel = None  # hidden value axis -> no value label
     core.finalize(
         ax,
         th,
@@ -110,6 +115,11 @@ def hist(
         subtitle=subtitle,
         caption=caption,
         xlabel=xlabel if xlabel is not None else x,
-        ylabel=ylabel if ylabel is not None else "count",
+        ylabel=final_ylabel,
     )
+
+    # Rounded bar ends (shadcn-style themes).
+    if th.bar_radius > 0:
+        core.round_bars(ax, containers, th, horizontal=False)
+
     return ax

@@ -1,17 +1,21 @@
 """Themes: a small bundle of palettes + chrome + typography, plus the global
 theme state and the matplotlib ``rcParams`` application.
 
-Built-in themes: :data:`LIGHT`, :data:`DARK`, and the custom :data:`LIME` /
-:data:`LIME_DARK` ("Lime Green", ported from a shadcn theme). A theme is applied
-globally with :func:`set_theme` or scoped with the :func:`theme` context manager;
-individual chart calls can also override per-call via their ``theme=`` argument.
+The default look is **shadcn** — :data:`LIGHT` / :data:`DARK` carry the shadcn
+aesthetic (rounded bar ends, no axis spines, faint horizontal grid, zinc/card
+neutrals; both axes stay labeled) over vizlib's validated colorblind-safe palette.
+:data:`CLASSIC` / :data:`CLASSIC_DARK`
+preserve the original vizlib look, and :data:`LIME` / :data:`LIME_DARK` is a custom
+theme. A theme is applied globally with :func:`set_theme` or scoped with the
+:func:`theme` context manager; individual chart calls can also override per-call via
+their ``theme=`` argument.
 """
 
 from __future__ import annotations
 
 import contextlib
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from types import MappingProxyType
 
 import matplotlib as mpl
@@ -58,6 +62,10 @@ class Theme:
     deemphasis: str
     font_family: tuple[str, ...] = field(default=("sans-serif",))
     type_scale: Mapping[str, int] = field(default_factory=lambda: _TYPE_SCALE)
+    # Chrome/shape style knobs (defaults preserve the classic look).
+    axis_lines: bool = True  # draw the left/bottom hairline spines
+    bar_radius: float = 0.0  # fraction of bar thickness to round the data-end corners
+    value_axis: bool = True  # show the value-axis ticks/labels (shadcn hides them)
 
     @classmethod
     def from_mode(cls, mode: str) -> "Theme":
@@ -79,8 +87,17 @@ class Theme:
         )
 
 
-LIGHT = Theme.from_mode("light")
-DARK = Theme.from_mode("dark")
+# The default look is shadcn: rounded bar ends, no axis spines, a faint horizontal
+# grid, zinc/card neutrals, and an Arial-metric sans — over vizlib's validated
+# colorblind-safe palette. Both axes stay labeled (ticks + axis title); only the
+# spines are dropped.
+_SHADCN_CHROME = dict(axis_lines=False, bar_radius=0.10)
+LIGHT = replace(Theme.from_mode("light"), **_SHADCN_CHROME)
+DARK = replace(Theme.from_mode("dark"), **_SHADCN_CHROME)
+# "classic" — the original vizlib look (hairline spines, visible value axis, square
+# bars, default sans), kept for anyone who wants it.
+CLASSIC = replace(Theme.from_mode("classic"), name="classic")
+CLASSIC_DARK = replace(Theme.from_mode("classic-dark"), name="classic-dark")
 # "Lime Green" — a custom theme ported from a shadcn theme (lime primary).
 LIME = Theme.from_mode("lime")
 LIME_DARK = Theme.from_mode("lime-dark")
@@ -88,6 +105,8 @@ LIME_DARK = Theme.from_mode("lime-dark")
 _BUILTIN: dict[str, Theme] = {
     "light": LIGHT,
     "dark": DARK,
+    "classic": CLASSIC,
+    "classic-dark": CLASSIC_DARK,
     "lime": LIME,
     "lime-dark": LIME_DARK,
 }

@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "vizlib"
 version = "0.1.0"
-description = "An opinionated matplotlib wrapper that turns a pandas DataFrame into a publication-ready chart in one call."
+description = "A shadcn-inspired chart library: an opinionated matplotlib wrapper that turns a pandas DataFrame into a clean shadcn-style chart in one call, light and dark."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }

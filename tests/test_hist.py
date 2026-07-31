@@ -11,8 +11,10 @@ import vizlib as viz
 
 
 @pytest.fixture(autouse=True)
-def _light_theme():
-    viz.set_theme("light")
+def _classic_theme():
+    # Bin assertions introspect Rectangle patches; the default (shadcn) rounds them
+    # into PathPatches, so run these under the classic theme.
+    viz.set_theme("classic")
     yield
     plt.close("all")
 
@@ -65,6 +67,15 @@ def test_highlight_emphasis(dist):
     assert viz.LIGHT.emphasis in colors  # highlighted distribution
     assert viz.LIGHT.deemphasis in colors  # faded context
     assert ax.get_legend() is None  # legend dropped in emphasis mode
+
+
+def test_default_theme_rounds_bins(dist):
+    from matplotlib.patches import PathPatch
+
+    # Default look is shadcn: rounded bins, no spines.
+    ax = viz.hist(dist, x="value", bins=6, theme="light")
+    assert any(isinstance(p, PathPatch) for p in ax.patches)
+    assert ax.spines["left"].get_visible() is False
 
 
 def test_texture_hatches_groups(dist):

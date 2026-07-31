@@ -14,10 +14,12 @@ collide, and no dark mode. Most people either fight the styling by hand every ti
 or reach for another library. Existing wrappers (seaborn, pandas `.plot`) improve
 ergonomics but still don't make a chart that is *clear* and *looks good* by default.
 
-**Value proposition:** `vizlib` does not add new plot types or a new rendering
-engine. It applies **good defaults automatically** on top of matplotlib —
-colorblind-safe palettes, recessive chrome, selective labels, an emphasis-first
-mindset, and a real dark mode — so the *first* chart you draw is already good.
+**Value proposition:** `vizlib` is a **shadcn-inspired** chart library. It does not
+add new plot types or a new rendering engine; it makes the **shadcn charts aesthetic
+the default** (rounded bar ends, borderless axes, faint grid, both axes labeled,
+light/dark card surfaces) on top of matplotlib — over a colorblind-safe palette, with
+selective labels and an emphasis-first mindset — so the *first* chart you draw already
+looks like a shadcn chart. (The original vizlib look remains as the `classic` theme.)
 
 **Hard constraint:** this is a **wrapper, never a from-scratch renderer.** Every
 chart is produced by calling matplotlib; `vizlib` only chooses inputs and
@@ -186,9 +188,13 @@ with viz.theme("dark"):           # scoped override
     viz.bar(df, x="region", y="sales")
 ```
 
-A `Theme` is a small dataclass bundling palettes + chrome + typography. Applying a
-theme sets matplotlib `rcParams` and is what each chart function reads before
-drawing. Two themes ship in v1: **light** and **dark**.
+A `Theme` is a small dataclass bundling palettes + chrome + typography + shape knobs
+(`axis_lines`, `bar_radius`, `value_axis`). Applying a theme sets matplotlib
+`rcParams` and is what each chart function reads before drawing. The **default look is
+shadcn**: **light** / **dark** carry the shadcn aesthetic (rounded bar ends, no axis
+spines, faint grid, both axes labeled, card surfaces, Arial-metric sans) over the
+validated colorblind-safe palette. **classic** / **classic-dark** preserve the original vizlib
+look; **lime** / **lime-dark** is a custom theme.
 
 ### 5.2 Palettes (validated default)
 

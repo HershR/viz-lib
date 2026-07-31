@@ -110,7 +110,7 @@ def line(
         drawn.append((ln, values))
 
     # 5. Post-style.
-    core.style_axes(ax, th, grid_axis="y")
+    core.style_axes(ax, th, grid_axis="y", value_axis="y")
     if not x_is_ordinal:
         ax.set_xticks(positions, [str(c) for c in matrix.index])
 
@@ -132,6 +132,9 @@ def line(
     if multi and not emphasis_mode and not direct_named:
         core.add_legend(ax, th)
 
+    final_ylabel = ylabel if ylabel is not None else (y if y is not None else "count")
+    if not th.value_axis:
+        final_ylabel = None  # hidden value axis -> no value label
     core.finalize(
         ax,
         th,
@@ -139,7 +142,7 @@ def line(
         subtitle=subtitle,
         caption=caption,
         xlabel=xlabel if xlabel is not None else x,
-        ylabel=ylabel if ylabel is not None else (y if y is not None else "count"),
+        ylabel=final_ylabel,
     )
     return ax
 

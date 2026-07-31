@@ -10,8 +10,11 @@ import vizlib as viz
 
 
 @pytest.fixture(autouse=True)
-def _light_theme():
-    viz.set_theme("light")
+def _classic_theme():
+    # Geometry assertions below introspect Rectangle patches (get_height/width/x/y),
+    # so run them under the classic theme; the default (shadcn) rounds bars into
+    # PathPatches. Shadcn-specific behavior is covered by dedicated tests.
+    viz.set_theme("classic")
     yield
     plt.close("all")
 
@@ -183,6 +186,28 @@ def test_subtitle_and_caption_render(sales):
     texts = {t.get_text() for t in ax.texts}
     assert "by region, Q3" in texts
     assert "Source: demo" in texts
+
+
+def test_default_theme_is_shadcn(sales):
+    from matplotlib.patches import PathPatch
+
+    # The default look is shadcn: rounded bars (PathPatches), no spines, but both
+    # axes stay labeled (value-axis ticks + axis title).
+    ax = viz.bar(sales, x="region", y="revenue", theme="light")
+    assert all(isinstance(p, PathPatch) for p in ax.patches)
+    assert ax.spines["left"].get_visible() is False
+    assert ax.spines["bottom"].get_visible() is False
+    assert any(t.get_text() for t in ax.get_yticklabels())
+    assert ax.get_ylabel() == "revenue"
+    assert ax.get_xlabel() == "region"
+
+
+def test_classic_theme_keeps_square_bars(sales):
+    from matplotlib.patches import Rectangle
+
+    ax = viz.bar(sales, x="region", y="revenue", theme="classic")
+    assert all(isinstance(p, Rectangle) for p in ax.patches)
+    assert ax.spines["left"].get_visible() is True
 
 
 def test_invalid_column_raises(sales):

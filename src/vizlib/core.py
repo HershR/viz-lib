@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.patches import PathPatch
+from matplotlib.path import Path
 
 from .themes import Theme
 
@@ -22,20 +24,32 @@ def new_axes(theme: Theme, ax: Axes | None) -> Axes:
     return ax
 
 
-def style_axes(ax: Axes, theme: Theme, *, grid_axis: str | None = "y") -> None:
+def style_axes(
+    ax: Axes,
+    theme: Theme,
+    *,
+    grid_axis: str | None = "y",
+    value_axis: str | None = None,
+) -> None:
     """Apply recessive chrome to ``ax``: surface, spines, ticks, and hairline grid.
 
     ``grid_axis`` is "y" (default), "x", "both", or ``None`` for no grid. Gridlines
     are solid hairlines one shade off the surface; the top/right spines are removed
-    and the remaining spines are hairlines in the baseline token.
+    and the remaining spines are hairlines in the baseline token (hidden entirely when
+    ``theme.axis_lines`` is False). ``value_axis`` ("y"/"x") names the value axis; when
+    ``theme.value_axis`` is False its tick labels are dropped (the grid carries it).
     """
     ax.set_facecolor(theme.surface)
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     for side in ("left", "bottom"):
-        ax.spines[side].set_color(theme.baseline)
-        ax.spines[side].set_linewidth(1.0)
+        if theme.axis_lines:
+            ax.spines[side].set_visible(True)
+            ax.spines[side].set_color(theme.baseline)
+            ax.spines[side].set_linewidth(1.0)
+        else:
+            ax.spines[side].set_visible(False)
 
     ax.tick_params(
         colors=theme.muted,
@@ -43,6 +57,12 @@ def style_axes(ax: Axes, theme: Theme, *, grid_axis: str | None = "y") -> None:
         labelsize=theme.type_scale["tick"],
         length=0,
     )
+
+    if value_axis and not theme.value_axis:
+        if value_axis == "y":
+            ax.tick_params(axis="y", labelleft=False, left=False)
+        elif value_axis == "x":
+            ax.tick_params(axis="x", labelbottom=False, bottom=False)
 
     if grid_axis:
         ax.grid(
@@ -125,6 +145,102 @@ def add_legend(ax: Axes, theme: Theme) -> None:
     )
     if legend is not None:
         legend.set_title(None)
+
+
+_ROUND_CODES = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.CURVE3,
+    Path.CURVE3,
+    Path.LINETO,
+    Path.CURVE3,
+    Path.CURVE3,
+    Path.LINETO,
+    Path.CLOSEPOLY,
+]
+
+
+def _rounded_bar_path(x0, y0, w, h, rx, ry, horizontal):
+    """A rectangle path with its two data-end corners rounded.
+
+    ``rx``/``ry`` are the corner radii in **data** units along x/y. Sizing them
+    separately (from a display-space radius) keeps the corner visually circular no
+    matter how different the x and y data ranges are. Vertical bars round the top
+    (away from the y=0 baseline); horizontal bars round the right end.
+    """
+    if horizontal:
+        rx = max(0.0, min(rx, abs(w)))
+        ry = max(0.0, min(ry, abs(h) / 2))
+        verts = [
+            (x0, y0),
+            (x0 + w - rx, y0),
+            (x0 + w, y0),  # control -> bottom-right corner
+            (x0 + w, y0 + ry),
+            (x0 + w, y0 + h - ry),
+            (x0 + w, y0 + h),  # control -> top-right corner
+            (x0 + w - rx, y0 + h),
+            (x0, y0 + h),
+            (x0, y0),
+        ]
+    else:
+        rx = max(0.0, min(rx, abs(w) / 2))
+        ry = max(0.0, min(ry, abs(h)))
+        verts = [
+            (x0, y0),
+            (x0, y0 + h - ry),
+            (x0, y0 + h),  # control -> top-left corner
+            (x0 + rx, y0 + h),
+            (x0 + w - rx, y0 + h),
+            (x0 + w, y0 + h),  # control -> top-right corner
+            (x0 + w, y0 + h - ry),
+            (x0 + w, y0),
+            (x0, y0),
+        ]
+    return Path(verts, _ROUND_CODES)
+
+
+def round_bars(ax, containers, theme, *, horizontal, only_top_segment=False):
+    """Replace bar rectangles with rounded-data-end path patches (shadcn look).
+
+    ``containers`` is the list of BarContainers drawn for the chart. Each rectangle
+    is swapped for a :class:`PathPatch` with the same style so colors, hatches, and
+    edges survive. ``only_top_segment`` rounds just the last container (stacked-bar
+    tops); otherwise every bar is rounded. The corner radius is derived in display
+    space so it looks the same regardless of the axes' data aspect.
+    """
+    if theme.bar_radius <= 0:
+        return
+    # Pixels per data unit on each axis, so a corner can be made visually circular.
+    origin = ax.transData.transform((0, 0))
+    px = abs(ax.transData.transform((1, 0))[0] - origin[0]) or 1.0
+    py = abs(ax.transData.transform((0, 1))[1] - origin[1]) or 1.0
+    targets = containers[-1:] if only_top_segment else containers
+    for container in targets:
+        # A BarContainer exposes .patches; hist may return a plain patch list.
+        rects = getattr(container, "patches", container)
+        for rect in list(rects):
+            w, h = rect.get_width(), rect.get_height()
+            if w == 0 or h == 0:
+                continue
+            if horizontal:
+                ry = theme.bar_radius * abs(h)  # radius along the bar thickness (y)
+                rx = ry * py / px  # equal pixel length in x
+            else:
+                rx = theme.bar_radius * abs(w)  # radius along the bar thickness (x)
+                ry = rx * px / py  # equal pixel length in y
+            path = _rounded_bar_path(
+                rect.get_x(), rect.get_y(), w, h, rx, ry, horizontal
+            )
+            patch = PathPatch(
+                path,
+                facecolor=rect.get_facecolor(),
+                edgecolor=rect.get_edgecolor(),
+                linewidth=rect.get_linewidth(),
+                hatch=rect.get_hatch(),
+                zorder=rect.get_zorder(),
+            )
+            rect.remove()
+            ax.add_patch(patch)
 
 
 def format_value(v: float) -> str:

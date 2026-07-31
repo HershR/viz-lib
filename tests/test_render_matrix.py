@@ -14,7 +14,7 @@ from matplotlib.axes import Axes
 
 import vizlib as viz
 
-THEMES = [None, "light", "dark", "lime", "lime-dark"]
+THEMES = [None, "light", "dark", "classic", "classic-dark", "lime", "lime-dark"]
 
 SALES = pd.DataFrame(
     {"region": ["North", "South", "East", "West"], "revenue": [120, 90, 150, 60]}

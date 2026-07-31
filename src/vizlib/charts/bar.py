@@ -189,7 +189,7 @@ def bar(
 
     # 4. Post-style.
     grid_axis = "x" if horizontal else "y"
-    core.style_axes(ax, th, grid_axis=grid_axis)
+    core.style_axes(ax, th, grid_axis=grid_axis, value_axis=grid_axis)
     if horizontal:
         ax.set_yticks(positions, categories)
         ax.invert_yaxis()  # first category at the top
@@ -221,6 +221,12 @@ def bar(
     else:
         xlabel = xlabel if xlabel is not None else default_cat_label
         ylabel = ylabel if ylabel is not None else default_val_label
+    # A hidden value axis drops its label too (no ticks to anchor it).
+    if not th.value_axis:
+        if horizontal:
+            xlabel = None
+        else:
+            ylabel = None
     core.finalize(
         ax,
         th,
@@ -230,6 +236,17 @@ def bar(
         xlabel=xlabel,
         ylabel=ylabel,
     )
+
+    # Rounded bar ends (shadcn-style themes). Done last so labels/legend used the
+    # original rectangles. Stacked rounds only the top segment of each stack.
+    if th.bar_radius > 0:
+        core.round_bars(
+            ax,
+            [c for c, _ in drawn],
+            th,
+            horizontal=horizontal,
+            only_top_segment=stacked,
+        )
 
     return ax
 
