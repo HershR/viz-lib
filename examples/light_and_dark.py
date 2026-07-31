@@ -1,6 +1,6 @@
 """Light and dark mode — the default shadcn look in both.
 
-vizlib renders the shadcn aesthetic by default (rounded bars, no axis spines, hidden
+chartcn renders the shadcn aesthetic by default (rounded bars, no axis spines, hidden
 value axis, faint grid) over the validated colorblind-safe palette. The default theme
 is `light`; `theme="dark"` (or `viz.set_theme("dark")`) gives the dark card.
 
@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-import vizlib as viz
+import chartcn as viz
 
 IMAGES = Path(__file__).parent / "images"
 

@@ -1,7 +1,7 @@
 # shadcn Chart Style — Breakdown
 
 A visual analysis of the shadcn chart reference images in [`references/`](./references)
-(`ShadcnBar1`, `ShadcnBar2`, `ShadcnLine1`, `ShadcnLine2`), written to guide vizlib's
+(`ShadcnBar1`, `ShadcnBar2`, `ShadcnLine1`, `ShadcnLine2`), written to guide chartcn's
 `shadcn` theme. All four references are **dark mode**. Hex values below were sampled
 directly from the images, so they're accurate to the source.
 
@@ -120,7 +120,7 @@ saturated blue (`#2878f8`). Multi-series charts stay within this blue family
 
 The live shadcn charts add a **hover tooltip** (a small card showing the series and
 value) and a cursor highlight. These references are static, so the tooltip isn't
-visible — vizlib renders static images, so this is informational only.
+visible — chartcn renders static images, so this is informational only.
 
 ---
 
@@ -136,7 +136,7 @@ never on a value axis.
 
 ---
 
-## 10. How vizlib's `shadcn` theme compares — gaps & recommendations
+## 10. How chartcn's `shadcn` theme compares — gaps & recommendations
 
 What our current `shadcn`/`shadcn-dark` theme already matches: rounded bar ends, no
 spines, hidden value axis, faint horizontal-only grid, muted labels, near-black card

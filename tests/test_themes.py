@@ -3,8 +3,8 @@
 import matplotlib as mpl
 import pytest
 
-import vizlib as viz
-from vizlib.themes import apply_theme, resolve_theme
+import chartcn as viz
+from chartcn.themes import apply_theme, resolve_theme
 
 
 def test_builtin_themes_have_eight_categorical_hues():
@@ -55,13 +55,13 @@ def test_default_light_dark_are_shadcn_styled():
         assert th.axis_lines is False
         assert th.bar_radius > 0
         assert th.value_axis is True
-    # ...over vizlib's validated CVD-safe palette (blue lead), not coral/teal.
+    # ...over chartcn's validated CVD-safe palette (blue lead), not coral/teal.
     assert viz.LIGHT.categorical[0] == "#2a78d6"
     assert viz.LIGHT.categorical == viz.CLASSIC.categorical
 
 
 def test_classic_themes_keep_the_original_chrome():
-    from vizlib.themes import resolve_theme
+    from chartcn.themes import resolve_theme
 
     assert resolve_theme("classic") is viz.CLASSIC
     assert resolve_theme("classic-dark") is viz.CLASSIC_DARK

@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "vizlib"
+name = "chartcn"
 version = "0.1.0"
 description = "A shadcn-inspired chart library: an opinionated matplotlib wrapper that turns a pandas DataFrame into a clean shadcn-style chart in one call, light and dark."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [{ name = "Hersh" }]
-keywords = ["matplotlib", "pandas", "visualization", "charts", "dataviz"]
+keywords = ["matplotlib", "pandas", "visualization", "charts", "dataviz", "shadcn"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -24,6 +24,11 @@ dependencies = [
     "pandas>=2.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/HershR/viz-lib"
+Repository = "https://github.com/HershR/viz-lib"
+Issues = "https://github.com/HershR/viz-lib/issues"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
@@ -33,7 +38,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/vizlib"]
+packages = ["src/chartcn"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

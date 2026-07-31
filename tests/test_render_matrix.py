@@ -12,7 +12,7 @@ import pandas as pd
 import pytest
 from matplotlib.axes import Axes
 
-import vizlib as viz
+import chartcn as viz
 
 THEMES = [None, "light", "dark", "classic", "classic-dark", "lime", "lime-dark"]
 
