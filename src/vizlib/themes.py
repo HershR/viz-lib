@@ -95,13 +95,13 @@ LIME_DARK = Theme.from_mode("lime-dark")
 SHADCN = replace(
     Theme.from_mode("shadcn"),
     axis_lines=False,
-    bar_radius=0.18,
+    bar_radius=0.10,  # subtle rounding (~4-6px), matching the references
     value_axis=False,
 )
 SHADCN_DARK = replace(
     Theme.from_mode("shadcn-dark"),
     axis_lines=False,
-    bar_radius=0.18,
+    bar_radius=0.10,
     value_axis=False,
 )
 

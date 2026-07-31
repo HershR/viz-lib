@@ -152,8 +152,8 @@ surface. The gaps against these references:
 2. **Line curve.** Reference default lines are a **smooth natural spline**; ours draw
    straight segments. Adding a smooth (`type="natural"`-style) option would match the
    signature line look.
-3. **Bar radius.** Reference rounding is **subtle** (~4–6px); our `bar_radius=0.18`
-   may be slightly heavier — worth dialing down a touch.
+3. **Bar radius.** ✅ Aligned — dialed our `bar_radius` down to **0.10** to match the
+   references' subtle (~4–6px) rounding.
 4. **Card frame + footer.** We render title + subtitle only; the references have a
    bordered, rounded, padded **card** and a **footer** (trend line + caption). A
    `caption` already exists; a subtle card background/border + a trend footer would
@@ -161,8 +161,10 @@ surface. The gaps against these references:
 5. **Value-above-bar labels.** The `Bar - Label` pattern (value centered above each
    bar, no y-axis) is very shadcn; our `label="auto"` only labels the extreme. An
    "all bars, above" label mode would match it.
-6. **Neutrals.** Reference card `#101010` / page `#080808` / grid `#181818` are a hair
-   different from ours (`#0a0a0a` surface, `#27272a` grid) — minor, but easy to align.
+6. **Neutrals.** ✅ Aligned — `shadcn-dark` now uses the reference card `#101010` and
+   grid `#181818` (was `#0a0a0a` / `#27272a`).
 
-Items 1–3 are the high-impact, low-effort changes to make our theme read like these
-references; 4–5 are larger, optional enhancements.
+Remaining gaps: **#1 (palette)** is intentionally left as coral/teal for now (a
+deliberate choice — the references use a blue demo theme); **#2 (smooth lines)** and
+**#4–5 (card frame/footer, value-above-bar labels)** are larger, optional
+enhancements. The neutral/radius items (**#3, #6**) are aligned.

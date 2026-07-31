@@ -209,10 +209,12 @@ SEQUENTIAL["shadcn-dark"] = SEQUENTIAL["dark"]
 DIVERGING["shadcn-dark"] = ("#e23670", "#27272a", "#2eb88a")
 EMPHASIS["shadcn-dark"] = "#2662d9"
 DEEMPHASIS["shadcn-dark"] = "#52525b"
-SURFACE["shadcn-dark"] = "#0a0a0a"
+# Neutrals sampled from the reference cards (see shadcnStyle.md): card #101010 on a
+# #080808 page, with a whisper-faint #181818 grid.
+SURFACE["shadcn-dark"] = "#101010"
 PRIMARY_INK["shadcn-dark"] = "#fafafa"
 SECONDARY_INK["shadcn-dark"] = "#a1a1aa"
 MUTED["shadcn-dark"] = "#71717a"
-GRIDLINE["shadcn-dark"] = "#27272a"
-BASELINE["shadcn-dark"] = "#27272a"
+GRIDLINE["shadcn-dark"] = "#181818"
+BASELINE["shadcn-dark"] = "#181818"
 FONT_FAMILY["shadcn-dark"] = _SHADCN_FONT

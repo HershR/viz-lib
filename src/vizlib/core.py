@@ -147,63 +147,56 @@ def add_legend(ax: Axes, theme: Theme) -> None:
         legend.set_title(None)
 
 
-def _rounded_bar_path(x0, y0, w, h, r, horizontal):
-    """A rectangle path with its two data-end corners rounded by radius ``r``.
+_ROUND_CODES = [
+    Path.MOVETO,
+    Path.LINETO,
+    Path.CURVE3,
+    Path.CURVE3,
+    Path.LINETO,
+    Path.CURVE3,
+    Path.CURVE3,
+    Path.LINETO,
+    Path.CLOSEPOLY,
+]
 
-    Vertical bars round the top (away from the y=0 baseline); horizontal bars round
-    the right end. ``r`` is clamped to half the thickness and the bar length.
+
+def _rounded_bar_path(x0, y0, w, h, rx, ry, horizontal):
+    """A rectangle path with its two data-end corners rounded.
+
+    ``rx``/``ry`` are the corner radii in **data** units along x/y. Sizing them
+    separately (from a display-space radius) keeps the corner visually circular no
+    matter how different the x and y data ranges are. Vertical bars round the top
+    (away from the y=0 baseline); horizontal bars round the right end.
     """
     if horizontal:
-        r = max(0.0, min(r, abs(h) / 2, abs(w)))
-        # Round the right corners.
+        rx = max(0.0, min(rx, abs(w)))
+        ry = max(0.0, min(ry, abs(h) / 2))
         verts = [
             (x0, y0),
-            (x0 + w - r, y0),
+            (x0 + w - rx, y0),
             (x0 + w, y0),  # control -> bottom-right corner
-            (x0 + w, y0 + r),
-            (x0 + w, y0 + h - r),
+            (x0 + w, y0 + ry),
+            (x0 + w, y0 + h - ry),
             (x0 + w, y0 + h),  # control -> top-right corner
-            (x0 + w - r, y0 + h),
+            (x0 + w - rx, y0 + h),
             (x0, y0 + h),
             (x0, y0),
         ]
-        codes = [
-            Path.MOVETO,
-            Path.LINETO,
-            Path.CURVE3,
-            Path.CURVE3,
-            Path.LINETO,
-            Path.CURVE3,
-            Path.CURVE3,
-            Path.LINETO,
-            Path.CLOSEPOLY,
-        ]
     else:
-        r = max(0.0, min(r, abs(w) / 2, abs(h)))
-        # Round the top corners.
+        rx = max(0.0, min(rx, abs(w) / 2))
+        ry = max(0.0, min(ry, abs(h)))
         verts = [
             (x0, y0),
-            (x0, y0 + h - r),
+            (x0, y0 + h - ry),
             (x0, y0 + h),  # control -> top-left corner
-            (x0 + r, y0 + h),
-            (x0 + w - r, y0 + h),
+            (x0 + rx, y0 + h),
+            (x0 + w - rx, y0 + h),
             (x0 + w, y0 + h),  # control -> top-right corner
-            (x0 + w, y0 + h - r),
+            (x0 + w, y0 + h - ry),
             (x0 + w, y0),
             (x0, y0),
         ]
-        codes = [
-            Path.MOVETO,
-            Path.LINETO,
-            Path.CURVE3,
-            Path.CURVE3,
-            Path.LINETO,
-            Path.CURVE3,
-            Path.CURVE3,
-            Path.LINETO,
-            Path.CLOSEPOLY,
-        ]
-    return Path(verts, codes)
+    return Path(verts, _ROUND_CODES)
 
 
 def round_bars(ax, containers, theme, *, horizontal, only_top_segment=False):
@@ -212,10 +205,15 @@ def round_bars(ax, containers, theme, *, horizontal, only_top_segment=False):
     ``containers`` is the list of BarContainers drawn for the chart. Each rectangle
     is swapped for a :class:`PathPatch` with the same style so colors, hatches, and
     edges survive. ``only_top_segment`` rounds just the last container (stacked-bar
-    tops); otherwise every bar is rounded.
+    tops); otherwise every bar is rounded. The corner radius is derived in display
+    space so it looks the same regardless of the axes' data aspect.
     """
     if theme.bar_radius <= 0:
         return
+    # Pixels per data unit on each axis, so a corner can be made visually circular.
+    origin = ax.transData.transform((0, 0))
+    px = abs(ax.transData.transform((1, 0))[0] - origin[0]) or 1.0
+    py = abs(ax.transData.transform((0, 1))[1] - origin[1]) or 1.0
     targets = containers[-1:] if only_top_segment else containers
     for container in targets:
         # A BarContainer exposes .patches; hist may return a plain patch list.
@@ -224,9 +222,15 @@ def round_bars(ax, containers, theme, *, horizontal, only_top_segment=False):
             w, h = rect.get_width(), rect.get_height()
             if w == 0 or h == 0:
                 continue
-            thickness = abs(h) if horizontal else abs(w)
-            r = theme.bar_radius * thickness
-            path = _rounded_bar_path(rect.get_x(), rect.get_y(), w, h, r, horizontal)
+            if horizontal:
+                ry = theme.bar_radius * abs(h)  # radius along the bar thickness (y)
+                rx = ry * py / px  # equal pixel length in x
+            else:
+                rx = theme.bar_radius * abs(w)  # radius along the bar thickness (x)
+                ry = rx * px / py  # equal pixel length in y
+            path = _rounded_bar_path(
+                rect.get_x(), rect.get_y(), w, h, rx, ry, horizontal
+            )
             patch = PathPatch(
                 path,
                 facecolor=rect.get_facecolor(),
