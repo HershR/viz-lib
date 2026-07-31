@@ -10,7 +10,7 @@ chart is a matplotlib call, and the value is the *good defaults* on top. The
 **default look is shadcn** (`light`/`dark`): rounded bar ends, no axis spines, a
 faint horizontal grid, card surfaces, an Arial-metric sans, both axes labeled
 — over a colorblind-safe palette. The original look is preserved as
-`classic`/`classic-dark`. Read `shadcnStyle.md` for the style breakdown, `mvp.md` for
+`classic`/`classic-dark`. Read `legacy/shadcnStyle.md` for the style breakdown, `legacy/mvp.md` for
 the design spec/roadmap, and `README.md` for the user-facing pitch.
 
 ## Commands
@@ -89,7 +89,7 @@ caller-supplied `ax=` is themed regardless of global state.
 
 ### Design non-negotiables (these are the product — do not "simplify" them away)
 
-These come from `mvp.md` §2/§10 and are encoded as defaults:
+These come from `legacy/mvp.md` §2/§10 and are encoded as defaults:
 
 - **Categorical palette is a fixed 8-hue order, never cycled.** The order *is* the
   colorblind-safety mechanism. A 9th series must fold into "Other" (see
@@ -112,7 +112,7 @@ These come from `mvp.md` §2/§10 and are encoded as defaults:
 
 ## Branches & roadmap
 
-Milestones are defined in `mvp.md` §8. `implement-core-charts` holds M1 (theming +
+Milestones are defined in `legacy/mvp.md` §8. `implement-core-charts` holds M1 (theming +
 `viz.bar`), M2 (`line`/`scatter`/`hist` on the same contract), and M3 (shared
 emphasis): all four charts now take `highlight=` (accent the selected series/group,
 gray the rest, drop the legend) via the shared `resolve_colors` path. Direct value

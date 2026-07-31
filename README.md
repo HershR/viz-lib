@@ -19,8 +19,8 @@ Same data, the same one call — matplotlib's defaults (left) vs chartcn (right)
 > shadcn style out of the box; `theme="dark"` gives the dark card. The four core
 > charts (`bar`, `line`, `scatter`, `hist`) share emphasis (`highlight=`) and an
 > opt-in texture channel. The original chartcn look is preserved as `classic` /
-> `classic-dark`. See [`shadcnStyle.md`](./shadcnStyle.md) for the style breakdown
-> and [`mvp.md`](./mvp.md) for the roadmap.
+> `classic-dark`. See [`shadcnStyle.md`](./legacy/shadcnStyle.md) for the style breakdown
+> and [`mvp.md`](./legacy/mvp.md) for the roadmap.
 
 ---
 
@@ -117,7 +117,7 @@ deliberate type scale. Small multi-series line charts are labeled directly at ea
 line's end instead of via a legend. `texture=True` is an opt-in secondary-encoding
 channel (hatches on bars/histograms, dash patterns on lines, marker shapes on
 scatter) so a chart stays legible in black-and-white and for colorblind readers.
-See [`mvp.md`](./mvp.md#4-public-api) for full signatures.
+See [`mvp.md`](./legacy/mvp.md#4-public-api) for full signatures.
 
 ---
 
@@ -145,7 +145,7 @@ type scale. A `Theme` also exposes chrome/shape knobs — `axis_lines` (draw the
 left/bottom spines), `bar_radius` (round bar ends), and `value_axis` (show the
 value-axis ticks) — so you can build your own look with
 `dataclasses.replace(viz.LIGHT, ...)`, or pass `palette=` to any chart. See
-[`shadcnStyle.md`](./shadcnStyle.md) for the shadcn style breakdown.
+[`shadcnStyle.md`](./legacy/shadcnStyle.md) for the shadcn style breakdown.
 
 ---
 
@@ -169,7 +169,7 @@ python examples/black_and_white.py  # texture channel, in color and grayscale
 - Small-multiples / faceting
 - A built-in colorblind-safety validator for custom palettes
 
-Full scope, milestones, and design rationale live in [`mvp.md`](./mvp.md).
+Full scope, milestones, and design rationale live in [`mvp.md`](./legacy/mvp.md).
 
 ---
 
@@ -180,7 +180,7 @@ Out of scope for v1: interactivity/tooltips (matplotlib static output only),
 dashboards, geospatial/3D/animation, and non-pandas inputs. It also deliberately
 avoids known-bad patterns — no dual-axis charts, no rainbow sequential ramps, no
 recolor-on-filter, no a-number-on-every-point. See
-[`mvp.md`](./mvp.md#10-non-goals--anti-patterns-the-library-refuses-to-make-easy).
+[`mvp.md`](./legacy/mvp.md#10-non-goals--anti-patterns-the-library-refuses-to-make-easy).
 
 ---
 

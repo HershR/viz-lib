@@ -83,7 +83,7 @@ DEEMPHASIS: dict[str, str] = {"light": "#898781", "dark": "#898781"}
 
 # --- Chrome & ink tokens -------------------------------------------------------
 # The default "light"/"dark" modes wear the shadcn look — pure-white / near-black
-# card surfaces and zinc neutrals (see shadcnStyle.md). The categorical palette above
+# card surfaces and zinc neutrals (see legacy/shadcnStyle.md). The categorical palette above
 # stays chartcn's validated colorblind-safe set.
 SURFACE: dict[str, str] = {"light": "#ffffff", "dark": "#101010"}
 PRIMARY_INK: dict[str, str] = {"light": "#0a0a0a", "dark": "#fafafa"}
