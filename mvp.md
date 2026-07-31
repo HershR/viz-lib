@@ -16,7 +16,7 @@ ergonomics but still don't make a chart that is *clear* and *looks good* by defa
 
 **Value proposition:** `vizlib` is a **shadcn-inspired** chart library. It does not
 add new plot types or a new rendering engine; it makes the **shadcn charts aesthetic
-the default** (rounded bar ends, borderless axes, hidden value axis, faint grid,
+the default** (rounded bar ends, borderless axes, faint grid, both axes labeled,
 light/dark card surfaces) on top of matplotlib — over a colorblind-safe palette, with
 selective labels and an emphasis-first mindset — so the *first* chart you draw already
 looks like a shadcn chart. (The original vizlib look remains as the `classic` theme.)
@@ -192,8 +192,8 @@ A `Theme` is a small dataclass bundling palettes + chrome + typography + shape k
 (`axis_lines`, `bar_radius`, `value_axis`). Applying a theme sets matplotlib
 `rcParams` and is what each chart function reads before drawing. The **default look is
 shadcn**: **light** / **dark** carry the shadcn aesthetic (rounded bar ends, no axis
-spines, hidden value axis, card surfaces, Arial-metric sans) over the validated
-colorblind-safe palette. **classic** / **classic-dark** preserve the original vizlib
+spines, faint grid, both axes labeled, card surfaces, Arial-metric sans) over the
+validated colorblind-safe palette. **classic** / **classic-dark** preserve the original vizlib
 look; **lime** / **lime-dark** is a custom theme.
 
 ### 5.2 Palettes (validated default)

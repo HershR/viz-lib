@@ -191,12 +191,15 @@ def test_subtitle_and_caption_render(sales):
 def test_default_theme_is_shadcn(sales):
     from matplotlib.patches import PathPatch
 
-    # The default look is shadcn: rounded bars (PathPatches), no spines, hidden y.
+    # The default look is shadcn: rounded bars (PathPatches), no spines, but both
+    # axes stay labeled (value-axis ticks + axis title).
     ax = viz.bar(sales, x="region", y="revenue", theme="light")
     assert all(isinstance(p, PathPatch) for p in ax.patches)
     assert ax.spines["left"].get_visible() is False
     assert ax.spines["bottom"].get_visible() is False
-    assert all(t.get_text() == "" for t in ax.get_yticklabels())
+    assert any(t.get_text() for t in ax.get_yticklabels())
+    assert ax.get_ylabel() == "revenue"
+    assert ax.get_xlabel() == "region"
 
 
 def test_classic_theme_keeps_square_bars(sales):

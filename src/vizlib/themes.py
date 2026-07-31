@@ -2,8 +2,9 @@
 theme state and the matplotlib ``rcParams`` application.
 
 The default look is **shadcn** — :data:`LIGHT` / :data:`DARK` carry the shadcn
-aesthetic (rounded bar ends, no axis spines, hidden value axis, zinc/card neutrals)
-over vizlib's validated colorblind-safe palette. :data:`CLASSIC` / :data:`CLASSIC_DARK`
+aesthetic (rounded bar ends, no axis spines, faint horizontal grid, zinc/card
+neutrals; both axes stay labeled) over vizlib's validated colorblind-safe palette.
+:data:`CLASSIC` / :data:`CLASSIC_DARK`
 preserve the original vizlib look, and :data:`LIME` / :data:`LIME_DARK` is a custom
 theme. A theme is applied globally with :func:`set_theme` or scoped with the
 :func:`theme` context manager; individual chart calls can also override per-call via
@@ -86,10 +87,11 @@ class Theme:
         )
 
 
-# The default look is shadcn: rounded bar ends, no axis spines, a hidden value axis
-# (a faint horizontal grid carries it), zinc/card neutrals, and an Arial-metric sans
-# — over vizlib's validated colorblind-safe palette.
-_SHADCN_CHROME = dict(axis_lines=False, bar_radius=0.10, value_axis=False)
+# The default look is shadcn: rounded bar ends, no axis spines, a faint horizontal
+# grid, zinc/card neutrals, and an Arial-metric sans — over vizlib's validated
+# colorblind-safe palette. Both axes stay labeled (ticks + axis title); only the
+# spines are dropped.
+_SHADCN_CHROME = dict(axis_lines=False, bar_radius=0.10)
 LIGHT = replace(Theme.from_mode("light"), **_SHADCN_CHROME)
 DARK = replace(Theme.from_mode("dark"), **_SHADCN_CHROME)
 # "classic" — the original vizlib look (hairline spines, visible value axis, square

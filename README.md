@@ -8,8 +8,8 @@
 matplotlib can draw almost anything, but its defaults look dated: loud colors, heavy
 gridlines, boxed-in axes, no dark mode. `vizlib` doesn't replace matplotlib or add
 new chart types — it makes the **shadcn charts aesthetic the default**: rounded bar
-ends, borderless axes, a hidden value axis with a whisper-faint horizontal grid,
-muted labels, and light/dark card surfaces — all over a **colorblind-safe palette**.
+ends, borderless axes, a whisper-faint horizontal grid, muted labels on both axes,
+and light/dark card surfaces — all over a **colorblind-safe palette**.
 
 Same data, the same one call — matplotlib's defaults (left) vs vizlib (right):
 
@@ -136,7 +136,7 @@ Built-in themes:
 
 | Theme | Look |
 |---|---|
-| **`light`** (default) / **`dark`** | The shadcn aesthetic — rounded bars, no spines, hidden value axis, faint grid, card surfaces — over the validated colorblind-safe palette. |
+| **`light`** (default) / **`dark`** | The shadcn aesthetic — rounded bars, no spines, faint grid, card surfaces, both axes labeled — over the validated colorblind-safe palette. |
 | **`classic`** / **`classic-dark`** | The original vizlib look: hairline spines, a visible value axis, square bars, the default sans. |
 | **`lime`** / **`lime-dark`** | A custom lime-accent theme (palette not colorblind-validated). |
 

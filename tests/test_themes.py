@@ -50,11 +50,11 @@ def test_theme_is_immutable():
 
 
 def test_default_light_dark_are_shadcn_styled():
-    # The default look is shadcn: rounded bars, no spines, hidden value axis.
+    # The default look is shadcn: rounded bars, no spines, both axes labeled.
     for th in (viz.LIGHT, viz.DARK):
         assert th.axis_lines is False
         assert th.bar_radius > 0
-        assert th.value_axis is False
+        assert th.value_axis is True
     # ...over vizlib's validated CVD-safe palette (blue lead), not coral/teal.
     assert viz.LIGHT.categorical[0] == "#2a78d6"
     assert viz.LIGHT.categorical == viz.CLASSIC.categorical

@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 matplotlib that renders **pandas DataFrames**. It draws nothing from scratch; every
 chart is a matplotlib call, and the value is the *good defaults* on top. The
 **default look is shadcn** (`light`/`dark`): rounded bar ends, no axis spines, a
-hidden value axis with a faint horizontal grid, card surfaces, an Arial-metric sans
+faint horizontal grid, card surfaces, an Arial-metric sans, both axes labeled
 — over a colorblind-safe palette. The original look is preserved as
 `classic`/`classic-dark`. Read `shadcnStyle.md` for the style breakdown, `mvp.md` for
 the design spec/roadmap, and `README.md` for the user-facing pitch.
@@ -67,7 +67,8 @@ the same five-step pipeline, and new chart types must too:
   the 8-hue categorical order, sequential/diverging ramps, and chrome/ink tokens.
 - `themes.py` — the immutable `Theme` dataclass assembled from `palettes`. The
   default `LIGHT`/`DARK` wear the **shadcn** chrome (knobs `axis_lines=False`,
-  `bar_radius=0.10`, `value_axis=False`, zinc/card neutrals, Liberation Sans) over
+  `bar_radius=0.10`; `value_axis=True` so both axes stay labeled; zinc/card neutrals,
+  Liberation Sans) over
   the validated CVD palette, built via `dataclasses.replace(from_mode(...), ...)`.
   `CLASSIC`/`CLASSIC_DARK` are the original look (classic-chrome defaults);
   `LIME`/`LIME_DARK` is a custom theme. Also: global theme state

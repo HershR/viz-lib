@@ -151,9 +151,9 @@ distinct set. Light (`lime`) and dark (`lime-dark`) variants.
 ![lime dark scatter](./images/lime_dark_scatter.png)
 
 ### `light_and_dark.py`
-The default look **is** shadcn — rounded bar ends, no axis spines, a hidden value
-axis with a faint horizontal grid, muted labels — over the validated colorblind-safe
-palette. It ships in light and dark mode (`theme="dark"`).
+The default look **is** shadcn — rounded bar ends, no axis spines, a faint horizontal
+grid, muted labels on both axes — over the validated colorblind-safe palette. It ships
+in light and dark mode (`theme="dark"`).
 
 ![light mode](./images/light_mode.png)
 ![dark mode](./images/dark_mode.png)
