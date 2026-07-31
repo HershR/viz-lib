@@ -5,8 +5,8 @@ The default look is **shadcn** — :data:`LIGHT` / :data:`DARK` carry the shadcn
 aesthetic (rounded bar ends, no axis spines, faint horizontal grid, zinc/card
 neutrals; both axes stay labeled) over chartcn's validated colorblind-safe palette.
 :data:`CLASSIC` / :data:`CLASSIC_DARK`
-preserve the original chartcn look, and :data:`LIME` / :data:`LIME_DARK` is a custom
-theme. A theme is applied globally with :func:`set_theme` or scoped with the
+preserve the original chartcn look. A theme is applied globally with
+:func:`set_theme` or scoped with the
 :func:`theme` context manager; individual chart calls can also override per-call via
 their ``theme=`` argument.
 """
@@ -98,17 +98,12 @@ DARK = replace(Theme.from_mode("dark"), **_SHADCN_CHROME)
 # bars, default sans), kept for anyone who wants it.
 CLASSIC = replace(Theme.from_mode("classic"), name="classic")
 CLASSIC_DARK = replace(Theme.from_mode("classic-dark"), name="classic-dark")
-# "Lime Green" — a custom theme ported from a shadcn theme (lime primary).
-LIME = Theme.from_mode("lime")
-LIME_DARK = Theme.from_mode("lime-dark")
 
 _BUILTIN: dict[str, Theme] = {
     "light": LIGHT,
     "dark": DARK,
     "classic": CLASSIC,
     "classic-dark": CLASSIC_DARK,
-    "lime": LIME,
-    "lime-dark": LIME_DARK,
 }
 _active: Theme = LIGHT
 

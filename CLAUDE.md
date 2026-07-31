@@ -70,8 +70,8 @@ the same five-step pipeline, and new chart types must too:
   `bar_radius=0.10`; `value_axis=True` so both axes stay labeled; zinc/card neutrals,
   Liberation Sans) over
   the validated CVD palette, built via `dataclasses.replace(from_mode(...), ...)`.
-  `CLASSIC`/`CLASSIC_DARK` are the original look (classic-chrome defaults);
-  `LIME`/`LIME_DARK` is a custom theme. Also: global theme state
+  `CLASSIC`/`CLASSIC_DARK` are the original look (classic-chrome defaults).
+  Also: global theme state
   (`set_theme`/`get_theme`/`theme`) and `apply_theme` (rcParams). `Theme` carries
   chrome/shape knobs — `axis_lines` (spines), `bar_radius` (rounded bar ends),
   `value_axis` (value-axis ticks) — that `core.style_axes`/`core.round_bars` honor.

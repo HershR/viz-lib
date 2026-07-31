@@ -23,7 +23,7 @@ Initial release.
 - **Theming engine** — an immutable `Theme` dataclass with chrome/shape knobs
   (`axis_lines`, `bar_radius`, `value_axis`), plus `set_theme`, `get_theme`, and the
   `theme()` context manager. Built-in themes: `light` / `dark` (the default shadcn
-  look), `classic` / `classic-dark` (the original look), and `lime` / `lime-dark`.
+  look) and `classic` / `classic-dark` (the original look).
 - **Default look is shadcn** — rounded bar ends, no axis spines, a faint horizontal
   grid, card surfaces, and an Arial-metric sans, over a validated colorblind-safe
   8-hue categorical palette (fixed order; a 9th series folds into "Other"). Both axes

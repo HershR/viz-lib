@@ -37,7 +37,6 @@ python examples/line_trends.py
 python examples/scatter_relationships.py
 python examples/distributions.py
 python examples/theming.py
-python examples/theme_lime.py
 python examples/light_and_dark.py
 python examples/black_and_white.py
 ```
@@ -65,7 +64,6 @@ interactively instead, replace the `savefig(...)` call with `plt.show()`.
 | [`scatter_relationships.py`](./scatter_relationships.py) | scatter | Color by group via `by=`, a third dimension via `size=`, emphasis via `highlight=` |
 | [`distributions.py`](./distributions.py) | hist | A single distribution, overlaid groups on shared bins, emphasis via `highlight=` |
 | [`theming.py`](./theming.py) | any | The dark theme, the `theme()` context manager, and a custom `Theme` |
-| [`theme_lime.py`](./theme_lime.py) | any | The built-in "Lime Green" theme (`lime` / `lime-dark`) |
 | [`light_and_dark.py`](./light_and_dark.py) | any | The default shadcn look in light and dark mode |
 | [`black_and_white.py`](./black_and_white.py) | bar, line | `texture=` secondary encoding, shown in color and desaturated to grayscale |
 
@@ -139,16 +137,6 @@ still distinct.
 
 ![texture in color](./images/black_and_white_color.png)
 ![texture in grayscale](./images/black_and_white_gray.png)
-
-### `theme_lime.py`
-The built-in **Lime Green** theme (ported from a shadcn theme). The lime primary
-leads single-series and first-series charts; the rest of the palette is a curated,
-distinct set. Light (`lime`) and dark (`lime-dark`) variants.
-
-![lime bar](./images/lime_bar.png)
-![lime grouped](./images/lime_grouped.png)
-![lime dark line](./images/lime_dark_line.png)
-![lime dark scatter](./images/lime_dark_scatter.png)
 
 ### `light_and_dark.py`
 The default look **is** shadcn — rounded bar ends, no axis spines, a faint horizontal

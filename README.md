@@ -97,7 +97,6 @@ viz.set_theme("dark")                                    # global
 |---|---|
 | **`light`** (default) / **`dark`** | The shadcn look — rounded bars, no spines, faint grid, card surfaces — over the colorblind-safe palette. |
 | **`classic`** / **`classic-dark`** | Hairline spines, square bars, the default sans. |
-| **`lime`** / **`lime-dark`** | A lime-accent theme (palette not colorblind-validated). |
 
 Build your own by passing `palette=` to any chart, or with
 `dataclasses.replace(viz.LIGHT, ...)` to tweak chrome knobs (`axis_lines`,
